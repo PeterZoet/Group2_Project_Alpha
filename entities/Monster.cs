@@ -1,3 +1,5 @@
+namespace entities;
+
 class Monster
 {
     public int ID { get; set; }
@@ -5,6 +7,7 @@ class Monster
     public int MaximumDamage { get; set; }
     public int CurrentHitPoints { get; set; }
     public int MaximumHitPoints { get; set; }
+    public Random random = new();
 
     public Monster(int id, string name, int maxDamage, int maxHitPoints) //defaults worden geïnitialiseerd bij het aanmaken van een object van deze class
     {
@@ -17,8 +20,7 @@ class Monster
 
     public int Attack()
     {
-        Random rand = new Random();
-        return rand.Next(1, MaximumDamage + 1);
+        return random.Next(1, MaximumDamage + 1);
     }
 
     public void TakeDamage(int damage)
