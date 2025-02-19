@@ -14,4 +14,24 @@ class Monster
         MaximumHitPoints = maxHitPoints;
         CurrentHitPoints = maxHitPoints;
     }
+
+    public int Attack()
+    {
+        Random rand = new Random();
+        return rand.Next(1, MaximumDamage + 1);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        CurrentHitPoints -= damage;
+        if (CurrentHitPoints < 0)
+        {
+            CurrentHitPoints = 0;
+        }
+    }
+
+    public bool IsAlive()
+    {
+        return CurrentHitPoints > 0;
+    }
 }    
