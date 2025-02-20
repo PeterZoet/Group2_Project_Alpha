@@ -1,3 +1,5 @@
+using entities;
+
 public static class World
 {
 
@@ -45,13 +47,13 @@ public static class World
 
     public static void PopulateMonsters()
     {
-        Monster rat = new Monster(MONSTER_ID_RAT, "rat", 1, 3, 3);
+        Monster rat = new(MONSTER_ID_RAT, "rat", 1, 3);
 
 
-        Monster snake = new Monster(MONSTER_ID_SNAKE, "snake", 10, 7, 7);
+        Monster snake = new(MONSTER_ID_SNAKE, "snake", 10, 7);
 
 
-        Monster giantSpider = new Monster(MONSTER_ID_GIANT_SPIDER, "giant spider", 3, 10, 10);
+        Monster giantSpider = new(MONSTER_ID_GIANT_SPIDER, "giant spider", 3, 10);
 
 
         Monsters.Add(rat);
@@ -191,7 +193,8 @@ public static class World
             }
         }
 
-        return null;
+        return null!;
+        // throw new InvalidOperationException($"Monster with ID {id} not found.");
     }
 
     public static Quest QuestByID(int id)
