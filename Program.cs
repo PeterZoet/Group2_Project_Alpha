@@ -1,4 +1,5 @@
-﻿namespace _2425_OP34_Group2_Project_Alpha;
+﻿using entities;
+namespace _2425_OP34_Group2_Project_Alpha;
 
 class Program
 {

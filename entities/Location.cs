@@ -1,3 +1,5 @@
+namespace entities;
+
 public class Location
 {
     // Required properties (set during construction)

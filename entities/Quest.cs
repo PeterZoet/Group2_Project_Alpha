@@ -1,3 +1,5 @@
+namespace entities;
+
 class Quest
 {
     public int ID { get; }
