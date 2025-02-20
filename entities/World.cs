@@ -1,4 +1,4 @@
-using entities;
+namespace entities;
 
 public static class World
 {
