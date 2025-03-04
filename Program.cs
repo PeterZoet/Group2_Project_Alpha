@@ -1,9 +1,8 @@
-﻿using entities;
-namespace _2425_OP34_Group2_Project_Alpha;
+﻿namespace _2425_OP34_Group2_Project_Alpha;
 
 class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
         Console.WriteLine("Hello, World!");
     }
