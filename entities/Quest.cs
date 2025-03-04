@@ -1,6 +1,6 @@
 namespace entities;
 
-class Quest
+public class Quest
 {
     public int ID { get; }
     public string Name { get; }
