@@ -1,11 +1,11 @@
-using entities;
+﻿using entities;
 namespace _2425_OP34_Group2_Project_Alpha
 {
     class Program
     {
         static void Main()
         {
-            DisplayWorldAttributes()
+            DisplayWorldAttributes();
             bool gameRunning = true;
 
             while (gameRunning)
