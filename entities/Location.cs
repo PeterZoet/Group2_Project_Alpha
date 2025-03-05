@@ -10,10 +10,10 @@ public class Location
     public Monster MonsterLivingHere { get; set; }
 
     // Neighboring locations (can be assigned after creation)
-    public Location LocationToNorth { get; set; }
-    public Location LocationToEast { get; set; }
-    public Location LocationToSouth { get; set; }
-    public Location LocationToWest { get; set; }
+    public Location? LocationToNorth { get; set; }
+    public Location? LocationToEast { get; set; }
+    public Location? LocationToSouth { get; set; }
+    public Location? LocationToWest { get; set; }
 
     // Constructor to initialize required fields
     public Location(int id, string name, string description, Quest questAvailableHere, Monster monsterLivingHere)
@@ -24,4 +24,24 @@ public class Location
         QuestAvailableHere = questAvailableHere;
         MonsterLivingHere = monsterLivingHere;
     }
+
+    public void Compass()
+    {
+        Console.WriteLine("\nFrom here you can go:\n"); 
+        if (LocationToNorth != null) Console.WriteLine("    N");
+        if (LocationToNorth != null) Console.WriteLine("    |");
+        Console.WriteLine($"{(LocationToWest != null ? "W---" : "    ")}|{(LocationToEast != null ? "---E" : "")}");
+        if (LocationToSouth != null) Console.WriteLine("    |");
+        if (LocationToSouth != null) Console.WriteLine("    S");
+        Console.WriteLine();
+    }
+
+    public Location? GetLocationAt(string location) => location switch
+    {
+        "N" => LocationToNorth,
+        "E" => LocationToEast,
+        "S" => LocationToSouth,
+        "W" => LocationToWest,
+        _ => null
+    };
 }

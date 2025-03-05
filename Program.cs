@@ -3,9 +3,11 @@ namespace _2425_OP34_Group2_Project_Alpha
 {
     class Program
     {
+        static Player player = new(World.Weapons[0], World.Locations[0]);
+
         static void Main()
         {
-            DisplayWorldAttributes();
+            // DisplayWorldAttributes(); //dev-only
             bool gameRunning = true;
 
             while (gameRunning)
@@ -46,15 +48,39 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         private static void Move()
         {
-            Console.WriteLine("Showing compass and give player the option to move");
-            //use GetValidInput to handle user input for direction
+            /* The map
+             * +------+
+             * |  p   |
+             * |  AW  |
+             * |VFTGBS|
+             * |  H   |
+             * +------+
+            */
+            Console.WriteLine("\nWhere would you like to go? (N/E/S/W)");
+            Console.WriteLine($"You are at: {player.CurrentLocation.Name}.");
+            player.CurrentLocation.Compass();
+            
+            foreach (string direction in new[] { "N", "E", "S", "W" })
+            {
+                Location? location = player.CurrentLocation.GetLocationAt(direction);
+                if (location != null)
+                {
+                    Console.WriteLine($"Location to the {direction}: {location.Name}");
+                }
+            } 
+            Console.WriteLine();
+
+            string movingTo = GetValidInput(["N", "E", "S", "W"]);
+            player.MoveTo(player.CurrentLocation.GetLocationAt(movingTo));
+
+            Console.WriteLine($"\nYou are now at: {player.CurrentLocation.GetLocationAt(movingTo)?.Name} \n");
         }
 
         private static void Fight()
         {
             Console.WriteLine("Fighting a monster if there is one...");
         }
-
+    
         private static bool ValidateInput(string? input, List<string> options)
         {
             return input != null && options.Contains(input);
@@ -66,7 +92,7 @@ namespace _2425_OP34_Group2_Project_Alpha
             do
             {
                 Console.WriteLine($"Enter a valid option: {string.Join(", ", validOptions)}");
-                input = Console.ReadLine();
+                input = Console.ReadLine()?.ToUpper();
             } while (!ValidateInput(input, validOptions));
 
             return input!;

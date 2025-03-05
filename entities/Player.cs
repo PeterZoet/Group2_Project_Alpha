@@ -2,18 +2,27 @@ namespace entities;
 
 public class Player
 {
-    public string Name { get; set; }
-    public int CurrentHitPoints { get; set; }
-    public int MaximumHitPoints { get; set; }
+    public int CurrentHitPoints;
+    public int MaximumHitPoints; //(Peter) deze hoeft niet in constructor maar gewoon default 100
     public Weapon CurrentWeapon { get; set; }
     public Location CurrentLocation { get; set; }
 
-    public Player(string name, int maxHitPoints, Weapon currentWeapon, Location currentLocation)
+    public Player(Weapon currentWeapon, Location startLocation)
     {
-        Name = name;
-        MaximumHitPoints = maxHitPoints;
-        CurrentHitPoints = maxHitPoints;
+        MaximumHitPoints = 100;
+        CurrentHitPoints = MaximumHitPoints;
         CurrentWeapon = currentWeapon;
-        CurrentLocation = currentLocation;
+        CurrentLocation = startLocation;
+    }
+
+    public void MoveTo(Location? newLocation)
+    {
+        if (newLocation == null) 
+        {
+            Console.WriteLine("You did not move because there is no location in the chosen direction!");
+            return; 
+        }
+        
+        CurrentLocation = newLocation;
     }
 }
