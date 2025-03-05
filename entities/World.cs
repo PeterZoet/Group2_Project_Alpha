@@ -29,6 +29,7 @@ public static class World
     public const int LOCATION_ID_FARM_FIELD = 7;
     public const int LOCATION_ID_BRIDGE = 8;
     public const int LOCATION_ID_SPIDER_FIELD = 9;
+    public const int LOCATION_ID_WITCH_HUT = 10;
 
     static World()
     {
@@ -117,6 +118,8 @@ public static class World
         Location spiderField = new Location(LOCATION_ID_SPIDER_FIELD, "Forest", "You see spider webs covering covering the trees in this forest.", null, null);
         spiderField.MonsterLivingHere = MonsterByID(MONSTER_ID_GIANT_SPIDER);
 
+        Location witchHut = new Location(LOCATION_ID_WITCH_HUT, "Witch hut", "A mysterious hut nestled in the woods, where a wise old witch restores your HP with her arcane remedies.", null, null);
+
         // Link the locations together
         home.LocationToNorth = townSquare;
 
@@ -132,6 +135,7 @@ public static class World
 
         alchemistHut.LocationToSouth = townSquare;
         alchemistHut.LocationToNorth = alchemistsGarden;
+        alchemistHut.LocationToEast = witchHut;
 
         alchemistsGarden.LocationToSouth = alchemistHut;
 
@@ -140,8 +144,12 @@ public static class World
 
         bridge.LocationToWest = guardPost;
         bridge.LocationToEast = spiderField;
+        bridge.LocationToNorth = witchHut;
 
         spiderField.LocationToWest = bridge;
+
+        witchHut.LocationToWest = alchemistHut;
+        witchHut.LocationToSouth = bridge;
 
         // Add the locations to the static list
         Locations.Add(home);
@@ -153,6 +161,7 @@ public static class World
         Locations.Add(farmersField);
         Locations.Add(bridge);
         Locations.Add(spiderField);
+        Locations.Add(witchHut);
     }
 
     public static Location LocationByID(int id)
