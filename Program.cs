@@ -7,38 +7,91 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         static void Main()
         {
+            Console.WriteLine(World.Locations[0].Name);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            Console.WriteLine($"Location to the north: {player.CurrentLocation.GetLocationAt("N").Name}");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
             // DisplayWorldAttributes(); //dev-only
             bool gameRunning = true;
 
             while (gameRunning)
             {
                 Console.WriteLine("What would you like to do (enter a number)?");
-                Console.WriteLine(" 1: See game stats \n 2: Move \n 3: Fight \n 4: Quit\n");
+                Console.WriteLine($"You are at: {player.CurrentLocation.Name}.");
+                
+                List<string> options = new List<string>
+                {
+                    "See game stats",
+                    "Move"
+                };
+                
+                if (player.CurrentLocation.Killable)
+                {
+                    options.Add("Fight");
+                }
+                if (player.CurrentLocation.Interactable)
+                {
+                    options.Add("Interact");
+                }
+                options.Add("Quit");
 
-                string option = GetValidInput(["1", "2", "3", "4"]);
+                for (int i = 0; i < options.Count; i++)
+                {
+                    Console.WriteLine($" {i + 1}: {options[i]}");
+                }
 
-                gameRunning = HandleUserChoice(option);
+                List<string> optionNumbers = new List<string>();
+                for (int i = 0; i < options.Count; i++)
+                {
+                    optionNumbers.Add((i + 1).ToString());
+                }
+                
+                // Get valid input from the user.
+                string option = GetValidInput(optionNumbers);
+                int choice = int.Parse(option);
+
+                gameRunning = HandleUserChoice(choice);
             }
         }
 
-        private static bool HandleUserChoice(string option)
+
+        private static bool HandleUserChoice(int option)
         {
             switch (option)
-            {
-                case "1":
-                    SeeGameStats();
-                    break;
-                case "2":
-                    Move();
-                    break;
-                case "3":
-                    Fight();
-                    break;
-                case "4":
-                    Console.WriteLine("--------------------\nSee you next time!\n--------------------");
-                    return false;
-            }
-            return true;
+                {
+                    case 1:
+                        SeeGameStats();
+                        break;
+                    case 2:
+                        Move();
+                        break;
+                    case 3:
+                        if (player.CurrentLocation.Killable && !player.CurrentLocation.Interactable)
+                        {
+                            Fight();
+                        }
+                        else if (player.CurrentLocation.Interactable)
+                        {
+                            Interact();
+                        }
+                        break;
+                    case 4:
+                        if (player.CurrentLocation.Killable && player.CurrentLocation.Interactable)
+                        {
+                            Fight();
+                        }
+                        else
+                        {
+                            Console.WriteLine("--------------------\nSee you next time!\n--------------------");
+                            return false;
+                        }
+                        break;
+                    case 5:
+                        Console.WriteLine("--------------------\nSee you next time!\n--------------------");
+                        return false;
+                }
+                return true;
         }
 
         private static void SeeGameStats()
@@ -72,13 +125,16 @@ namespace _2425_OP34_Group2_Project_Alpha
 
             string movingTo = GetValidInput(["N", "E", "S", "W"]);
             player.MoveTo(player.CurrentLocation.GetLocationAt(movingTo));
-
-            Console.WriteLine($"\nYou are now at: {player.CurrentLocation.GetLocationAt(movingTo)?.Name} \n");
         }
 
         private static void Fight()
         {
             Console.WriteLine("Fighting a monster if there is one...");
+        }
+
+        private static void Interact()
+        {
+            Console.WriteLine("Interacting with something...");
         }
     
         private static bool ValidateInput(string? input, List<string> options)
