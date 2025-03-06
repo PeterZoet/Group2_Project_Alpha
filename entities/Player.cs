@@ -3,7 +3,7 @@ namespace entities;
 public class Player
 {
     public int CurrentHitPoints;
-    public int MaximumHitPoints; //(Peter) deze hoeft niet in constructor maar gewoon default 100
+    public int MaximumHitPoints;
     public Weapon CurrentWeapon { get; set; }
     public Location CurrentLocation { get; set; }
 

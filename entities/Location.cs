@@ -6,6 +6,8 @@ public class Location
     public int ID { get; }
     public string Name { get; }
     public string Description { get; }
+    public bool Interactable { get; set; } //In this location you can do something
+    public bool Killable { get; set; } //In this location you can kill something
     public Quest QuestAvailableHere { get; set; }
     public Monster MonsterLivingHere { get; set; }
 
@@ -16,11 +18,13 @@ public class Location
     public Location? LocationToWest { get; set; }
 
     // Constructor to initialize required fields
-    public Location(int id, string name, string description, Quest questAvailableHere, Monster monsterLivingHere)
+    public Location(int id, string name, string description, bool interactable, bool killable, Quest questAvailableHere, Monster monsterLivingHere)
     {
         ID = id;
         Name = name;
         Description = description;
+        Interactable = interactable;
+        Killable = killable;
         QuestAvailableHere = questAvailableHere;
         MonsterLivingHere = monsterLivingHere;
     }
