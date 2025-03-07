@@ -17,6 +17,7 @@ namespace _2425_OP34_Group2_Project_Alpha
 
             while (gameRunning)
             {
+                Console.Clear();
                 Console.WriteLine("What would you like to do (enter a number)?");
                 Console.WriteLine($"You are at: {player.CurrentLocation.Name}.");
                 
@@ -109,6 +110,7 @@ namespace _2425_OP34_Group2_Project_Alpha
              * |  H   |
              * +------+
             */
+            Console.Clear();
             Console.WriteLine("\nWhere would you like to go? (N/E/S/W)");
             Console.WriteLine($"You are at: {player.CurrentLocation.Name}.");
             player.CurrentLocation.Compass();
@@ -130,11 +132,13 @@ namespace _2425_OP34_Group2_Project_Alpha
         private static void Fight()
         {
             Console.WriteLine("Fighting a monster if there is one...");
+            Thread.Sleep(2000); // Pause application for 2 sec (Remove later: using for testing purposes)
         }
 
         private static void Interact()
         {
             Console.WriteLine("Interacting with something...");
+            Thread.Sleep(2000); // Pause application for 2 sec (Remove later: using for testing purposes)
         }
     
         private static bool ValidateInput(string? input, List<string> options)
