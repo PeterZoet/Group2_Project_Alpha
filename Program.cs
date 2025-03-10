@@ -77,10 +77,10 @@ namespace _2425_OP34_Group2_Project_Alpha
                     Fight();
                     break;
                 case "Start Quest":
-                    StartQuest();
+                    PlayerQuest.StartQuest(player.CurrentLocation.QuestAvailableHere);;
                     break;
                 case "Flee Quest":
-                    FleeQuest();
+                    PlayerQuest.FleeQuest(player.CurrentLocation.QuestAvailableHere);
                     break;
                 case "Quit":
                     Console.WriteLine("--------------------\nSee you next time!\n--------------------");
@@ -141,33 +141,9 @@ namespace _2425_OP34_Group2_Project_Alpha
         private static void Fight()
         {
             Console.WriteLine("Fighting a monster if there is one...");
+            Thread.Sleep(2000); // Pause application for 2 sec (Remove later: using for testing purposes)
         }
         
-        private static void StartQuest()
-        {
-            if (player.CurrentLocation.QuestAvailableHere != null)
-            {
-                PlayerQuest.StartQuest(player.CurrentLocation.QuestAvailableHere);
-                Console.WriteLine(player.CurrentLocation.QuestAvailableHere.Name);
-            }
-            else
-            {
-                Console.WriteLine("No quest available here.");
-            }
-        }
-        
-        private static void FleeQuest()
-        {
-            if (player.CurrentLocation.QuestAvailableHere != null && 
-                PlayerQuest.ActiveQuests.Contains(player.CurrentLocation.QuestAvailableHere))
-            {
-                PlayerQuest.FleeQuest(player.CurrentLocation.QuestAvailableHere);
-            }
-            else
-            {
-                Console.WriteLine("No active quest to flee from here.");
-            }
-        }
     
         private static bool ValidateInput(string? input, List<string> options)
         {
