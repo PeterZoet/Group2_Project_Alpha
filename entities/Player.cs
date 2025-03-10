@@ -6,6 +6,7 @@ public class Player
     public int MaximumHitPoints;
     public Weapon CurrentWeapon { get; set; }
     public Location CurrentLocation { get; set; }
+    private Location _previousLocation;
 
     public Player(Weapon currentWeapon, Location startLocation)
     {
@@ -13,6 +14,7 @@ public class Player
         CurrentHitPoints = MaximumHitPoints;
         CurrentWeapon = currentWeapon;
         CurrentLocation = startLocation;
+        _previousLocation = startLocation;
     }
 
     public void MoveTo(Location? newLocation)
@@ -23,6 +25,16 @@ public class Player
             return; 
         }
         
+        // Cancel active quests if leaving the area
+        if (CurrentLocation.QuestAvailableHere != null && 
+            PlayerQuest.ActiveQuests.Contains(CurrentLocation.QuestAvailableHere))
+        {
+            Quest questToCancel = CurrentLocation.QuestAvailableHere;
+            PlayerQuest.FleeQuest(questToCancel);
+            Console.WriteLine($"You left the area, so the quest '{questToCancel.Name}' has been cancelled.");
+        }
+        
+        _previousLocation = CurrentLocation;
         CurrentLocation = newLocation;
     }
 }
