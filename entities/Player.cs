@@ -1,5 +1,4 @@
 namespace entities;
-
 public class Player
 {
     public int CurrentHitPoints;
