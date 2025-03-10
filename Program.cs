@@ -7,19 +7,14 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         static void Main()
         {
-            Console.WriteLine(World.Locations[0].Name);
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            Console.WriteLine($"Location to the north: {player.CurrentLocation.GetLocationAt("N").Name}");
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-
-            // DisplayWorldAttributes(); //dev-only
+            DisplayWorldAttributes(); //dev-only
             bool gameRunning = true;
 
             while (gameRunning)
             {
-                Console.Clear();
                 Console.WriteLine("What would you like to do (enter a number)?");
                 Console.WriteLine($"You are at: {player.CurrentLocation.Name}.");
+                Console.WriteLine(player.CurrentLocation.Description);
                 
                 List<string> options = new List<string>
                 {
@@ -31,10 +26,19 @@ namespace _2425_OP34_Group2_Project_Alpha
                 {
                     options.Add("Fight");
                 }
-                if (player.CurrentLocation.Interactable)
+                
+                 
+                Quest locationQuest = player.CurrentLocation.QuestAvailableHere;
+                if (locationQuest != null && !PlayerQuest.ActiveQuests.Contains(locationQuest) && !PlayerQuest.CompletedQuests.Contains(locationQuest))
                 {
-                    options.Add("Interact");
+                    options.Add("Start Quest");
                 }
+                
+                if (locationQuest != null && PlayerQuest.ActiveQuests.Contains(locationQuest))
+                {
+                    options.Add("Flee Quest");
+                }
+                
                 options.Add("Quit");
 
                 for (int i = 0; i < options.Count; i++)
@@ -52,52 +56,58 @@ namespace _2425_OP34_Group2_Project_Alpha
                 string option = GetValidInput(optionNumbers);
                 int choice = int.Parse(option);
 
-                gameRunning = HandleUserChoice(choice);
+                gameRunning = HandleUserChoice(choice, options);
             }
         }
 
 
-        private static bool HandleUserChoice(int option)
+        private static bool HandleUserChoice(int choice, List<string> options)
         {
-            switch (option)
-                {
-                    case 1:
-                        SeeGameStats();
-                        break;
-                    case 2:
-                        Move();
-                        break;
-                    case 3:
-                        if (player.CurrentLocation.Killable && !player.CurrentLocation.Interactable)
-                        {
-                            Fight();
-                        }
-                        else if (player.CurrentLocation.Interactable)
-                        {
-                            Interact();
-                        }
-                        break;
-                    case 4:
-                        if (player.CurrentLocation.Killable && player.CurrentLocation.Interactable)
-                        {
-                            Fight();
-                        }
-                        else
-                        {
-                            Console.WriteLine("--------------------\nSee you next time!\n--------------------");
-                            return false;
-                        }
-                        break;
-                    case 5:
-                        Console.WriteLine("--------------------\nSee you next time!\n--------------------");
-                        return false;
-                }
-                return true;
+            string selectedOption = options[choice - 1];
+            
+            switch (selectedOption)
+            {
+                case "See game stats":
+                    SeeGameStats();
+                    break;
+                case "Move":
+                    Move();
+                    break;
+                case "Fight":
+                    Fight();
+                    break;
+                case "Start Quest":
+                    PlayerQuest.StartQuest(player.CurrentLocation.QuestAvailableHere);;
+                    break;
+                case "Flee Quest":
+                    PlayerQuest.FleeQuest(player.CurrentLocation.QuestAvailableHere);
+                    break;
+                case "Quit":
+                    Console.WriteLine("--------------------\nSee you next time!\n--------------------");
+                    return false;
+            }
+            return true;
         }
 
         private static void SeeGameStats()
         {
             Console.WriteLine("Displaying stats...");
+            Console.WriteLine($"HP: {player.CurrentHitPoints}/{player.MaximumHitPoints}");
+            Console.WriteLine($"Weapon: {player.CurrentWeapon.Name} (Max Damage: {player.CurrentWeapon.MaximumDamage})");
+            
+            // Display active quests
+            Console.WriteLine("\nActive Quests:");
+            if (PlayerQuest.ActiveQuests.Count == 0)
+            {
+                Console.WriteLine("None");
+            }
+            else
+            {
+                foreach (var quest in PlayerQuest.ActiveQuests)
+                {
+                    Console.WriteLine($"- {quest.Name}: {quest.Description}");
+                }
+            }
         }
 
         private static void Move()
@@ -110,7 +120,6 @@ namespace _2425_OP34_Group2_Project_Alpha
              * |  H   |
              * +------+
             */
-            Console.Clear();
             Console.WriteLine("\nWhere would you like to go? (N/E/S/W)");
             Console.WriteLine($"You are at: {player.CurrentLocation.Name}.");
             player.CurrentLocation.Compass();
@@ -134,12 +143,7 @@ namespace _2425_OP34_Group2_Project_Alpha
             Console.WriteLine("Fighting a monster if there is one...");
             Thread.Sleep(2000); // Pause application for 2 sec (Remove later: using for testing purposes)
         }
-
-        private static void Interact()
-        {
-            Console.WriteLine("Interacting with something...");
-            Thread.Sleep(2000); // Pause application for 2 sec (Remove later: using for testing purposes)
-        }
+        
     
         private static bool ValidateInput(string? input, List<string> options)
         {
@@ -173,7 +177,6 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine($"   Quest: {(location.QuestAvailableHere != null ? $"{location.QuestAvailableHere.Name} - id {location.QuestAvailableHere.ID}" : "None")}");
                 Console.WriteLine($"   Monster: {(location.MonsterLivingHere != null ? $"{location.MonsterLivingHere.Name} - id {location.MonsterLivingHere.ID}" : "None")}\n");
             }
-
         }
     }
 }

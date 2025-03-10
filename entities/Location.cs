@@ -6,7 +6,6 @@ public class Location
     public int ID { get; }
     public string Name { get; }
     public string Description { get; }
-    public bool Interactable { get; set; } //In this location you can do something
     public bool Killable { get; set; } //In this location you can kill something
     public Quest QuestAvailableHere { get; set; }
     public Monster MonsterLivingHere { get; set; }
@@ -23,7 +22,6 @@ public class Location
         ID = id;
         Name = name;
         Description = description;
-        Interactable = interactable;
         Killable = killable;
         QuestAvailableHere = questAvailableHere;
         MonsterLivingHere = monsterLivingHere;
