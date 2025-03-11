@@ -5,7 +5,7 @@ public class Player
     public int MaximumHitPoints;
     public Weapon CurrentWeapon { get; set; }
     public Location CurrentLocation { get; set; }
-    private Location _previousLocation;
+    public Location _previousLocation { get; set; }
     public List<Item> Inventory { get; set; }
     
 
@@ -31,8 +31,7 @@ public class Player
         }
         
         // Cancel active quests if leaving the area
-        if (CurrentLocation.QuestAvailableHere != null && 
-            PlayerQuest.ActiveQuests.Contains(CurrentLocation.QuestAvailableHere))
+        if (CurrentLocation.QuestAvailableHere != null && PlayerQuest.ActiveQuest == CurrentLocation.QuestAvailableHere)
         {
             Quest questToCancel = CurrentLocation.QuestAvailableHere;
             PlayerQuest.FleeQuest(questToCancel);

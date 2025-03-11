@@ -23,7 +23,7 @@ namespace _2425_OP34_Group2_Project_Alpha
                     "Open inventory"
                 };
                 
-                if (player.CurrentLocation.Killable)
+                if (player.CurrentLocation.Killable && player._previousLocation.QuestAvailableHere == PlayerQuest.ActiveQuest)
                 {
                     options.Add("Fight");
                 }
@@ -79,6 +79,8 @@ namespace _2425_OP34_Group2_Project_Alpha
                     break;
                 case "Start Quest":
                     PlayerQuest.StartQuest(player.CurrentLocation.QuestAvailableHere);
+                    Console.WriteLine("Press enter to continue...");
+                    Console.ReadLine();
                     break;
                 case "Flee Quest":
                     PlayerQuest.FleeQuest(player.CurrentLocation.QuestAvailableHere);
@@ -102,7 +104,7 @@ namespace _2425_OP34_Group2_Project_Alpha
             
             // Display active quest
             Console.WriteLine("\nActive Quests:");
-            if (PlayerQuest.ActiveQuest != null)
+            if (PlayerQuest.ActiveQuest == null)
             {
                 Console.WriteLine("None");
             }
