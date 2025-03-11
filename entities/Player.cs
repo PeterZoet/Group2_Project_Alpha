@@ -7,6 +7,8 @@ public class Player
     public Weapon CurrentWeapon { get; set; }
     public Location CurrentLocation { get; set; }
     private Location _previousLocation;
+    public List<Item> Inventory { get; set; }
+    
 
     public Player(Weapon currentWeapon, Location startLocation)
     {
@@ -16,25 +18,28 @@ public class Player
         CurrentLocation = startLocation;
         _previousLocation = startLocation;
         Coins = 0;
+        Inventory = new List<Item>();
+        Inventory.Add(new Item("Healing Potion"));
+        Inventory.Add(new Weapon(World.WEAPON_ID_RUSTY_SWORD,"Rusty Sword", 5));
+        
     }
 
     public void MoveTo(Location? newLocation)
     {
-        if (newLocation == null) 
+        if (newLocation == null)
         {
             Console.WriteLine("You did not move because there is no location in the chosen direction!");
-            return; 
+            return;
         }
-        
+
         // Cancel active quests if leaving the area
-        if (CurrentLocation.QuestAvailableHere != null && 
+        if (CurrentLocation.QuestAvailableHere != null &&
             PlayerQuest.ActiveQuests.Contains(CurrentLocation.QuestAvailableHere))
         {
             Quest questToCancel = CurrentLocation.QuestAvailableHere;
             PlayerQuest.FleeQuest(questToCancel);
-            Console.WriteLine($"You left the area, so the quest '{questToCancel.Name}' has been cancelled.");
         }
-        
+
         _previousLocation = CurrentLocation;
         CurrentLocation = newLocation;
     }
