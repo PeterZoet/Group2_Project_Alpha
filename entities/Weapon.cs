@@ -1,15 +1,14 @@
 namespace entities;
 
-public class Weapon
+public class Weapon : Item
 {
-    public int ID { get; }
-    public string Name { get; }
-    public int MaximumDamage { get; }
+    public int MaximumDamage { get; set; }
+    public int ID { get; set; }
 
-    public Weapon(int id, string name, int maximumdamage)
+    public Weapon(int id, string name, int maximumDamage) 
+        : base(name)
     {
         ID = id;
-        Name = name;
-        MaximumDamage = maximumdamage;
+        MaximumDamage = maximumDamage;
     }
 }
