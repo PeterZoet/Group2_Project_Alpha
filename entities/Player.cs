@@ -3,6 +3,7 @@ public class Player
 {
     public int CurrentHitPoints;
     public int MaximumHitPoints;
+    public int Coins;
     public Weapon CurrentWeapon { get; set; }
     public Location CurrentLocation { get; set; }
     private Location _previousLocation;
@@ -16,6 +17,7 @@ public class Player
         CurrentWeapon = currentWeapon;
         CurrentLocation = startLocation;
         _previousLocation = startLocation;
+        Coins = 0;
         Inventory = new List<Item>();
         Inventory.Add(new Item("Healing Potion"));
         Inventory.Add(new Weapon(World.WEAPON_ID_RUSTY_SWORD,"Rusty Sword", 5));
