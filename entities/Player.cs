@@ -24,15 +24,7 @@ public class Player
             return; 
         }
         
-        // Cancel active quests if leaving the area
-        if (CurrentLocation.QuestAvailableHere != null && 
-            PlayerQuest.ActiveQuests.Contains(CurrentLocation.QuestAvailableHere))
-        {
-            Quest questToCancel = CurrentLocation.QuestAvailableHere;
-            PlayerQuest.FleeQuest(questToCancel);
-            Console.WriteLine($"You left the area, so the quest '{questToCancel.Name}' has been cancelled.");
-        }
-        
+       
         _previousLocation = CurrentLocation;
         CurrentLocation = newLocation;
     }
