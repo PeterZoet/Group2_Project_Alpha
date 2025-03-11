@@ -19,7 +19,8 @@ namespace _2425_OP34_Group2_Project_Alpha
                 List<string> options = new List<string>
                 {
                     "See game stats",
-                    "Move"
+                    "Move",
+                    "Open inventory"
                 };
                 
                 if (player.CurrentLocation.Killable)
@@ -77,10 +78,13 @@ namespace _2425_OP34_Group2_Project_Alpha
                     Fight();
                     break;
                 case "Start Quest":
-                    PlayerQuest.StartQuest(player.CurrentLocation.QuestAvailableHere);;
+                    PlayerQuest.StartQuest(player.CurrentLocation.QuestAvailableHere);
                     break;
                 case "Flee Quest":
                     PlayerQuest.FleeQuest(player.CurrentLocation.QuestAvailableHere);
+                    break;
+                case "Open inventory":
+                    OpenInventory();
                     break;
                 case "Quit":
                     Console.WriteLine("--------------------\nSee you next time!\n--------------------");
@@ -178,5 +182,66 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine($"   Monster: {(location.MonsterLivingHere != null ? $"{location.MonsterLivingHere.Name} - id {location.MonsterLivingHere.ID}" : "None")}\n");
             }
         }
+        private static void OpenInventory()
+        {
+            Console.WriteLine("Inventory:");
+            foreach (Item item in player.Inventory)
+            {
+                if (item is Weapon)
+                {
+                    Weapon weapon = (Weapon)item;
+                    Console.WriteLine($"{weapon.ID}. {item.Name} - {item.Description} (Damage: {weapon.MaximumDamage})");
+                }
+                else
+                {
+                    Console.WriteLine($"{item.Name} - {item.Description}");
+                }
+            }
+        
+            Console.WriteLine("What would you like to do?");
+            Console.WriteLine("1. Use an item");
+            Console.WriteLine("2. Close inventory");
+        
+            string input = Console.ReadLine();
+        
+            switch (input)
+            {
+                case "1":
+                    UseItem();
+                    break;
+                case "2":
+                    break;
+                default:
+                    Console.WriteLine("Invalid input. Please try again.");
+                    OpenInventory();
+                    break;
+            }
+        }
+        private static void UseItem()
+        {
+            Console.WriteLine("Which item would you like to use?");
+            for (int i = 0; i < player.Inventory.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {player.Inventory[i].Name}");
+            }
+        
+            string input = Console.ReadLine();
+        
+            if (int.TryParse(input, out int index) && index > 0 && index <= player.Inventory.Count)
+            {
+                Item item = player.Inventory[index - 1];
+
+                Console.WriteLine($"You used {item.Name}.");
+        
+
+                player.Inventory.RemoveAt(index - 1);
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+                UseItem();
+            }
+        }
+
+        }
     }
-}
