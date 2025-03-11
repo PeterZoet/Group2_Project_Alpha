@@ -190,11 +190,11 @@ namespace _2425_OP34_Group2_Project_Alpha
                 if (item is Weapon)
                 {
                     Weapon weapon = (Weapon)item;
-                    Console.WriteLine($"{weapon.ID}. {item.Name} - {item.Description} (Damage: {weapon.MaximumDamage})");
+                    Console.WriteLine($"{weapon.ID}. {item.Name} - (Damage: {weapon.MaximumDamage})");
                 }
                 else
                 {
-                    Console.WriteLine($"{item.Name} - {item.Description}");
+                    Console.WriteLine($"{item.Name}");
                 }
             }
         

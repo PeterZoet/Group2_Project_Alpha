@@ -17,8 +17,8 @@ public class Player
         CurrentLocation = startLocation;
         _previousLocation = startLocation;
         Inventory = new List<Item>();
-        Inventory.Add(new Item("Healing Potion", "Restores 10 health"));
-        Inventory.Add(new Weapon(1, "Rusty Sword", "A rusty sword", 5));
+        Inventory.Add(new Item("Healing Potion"));
+        Inventory.Add(new Weapon(World.WEAPON_ID_RUSTY_SWORD,"Rusty Sword", 5));
         
     }
 
