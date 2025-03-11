@@ -20,33 +20,7 @@ namespace _2425_OP34_Group2_Project_Alpha
                     "See game stats",
                     "Move"
                 };
-                bool currentLocationQuestIsActive;
-                foreach (var location in World.Locations)
-                {
-                    if(location.Name == "Farmhouse")
-                    {
-                        if (player.CurrentLocation.QuestAvailableHere == location.QuestAvailableHere)
-                {
-                     currentLocationQuestIsActive = true;
-                }
-                    }
-                    if(location.Name == "Bridge")
-                    {
-                        if (player.CurrentLocation.QuestAvailableHere == location.QuestAvailableHere)
-                {
-                     currentLocationQuestIsActive = true;
-                }
-                    }
-                    if(location.Name == "Alchemist's hut")
-                    {
-                        if (player.CurrentLocation.QuestAvailableHere == location.QuestAvailableHere)
-                {
-                     currentLocationQuestIsActive = true;
-                }
-                    }
-                }
-                
-                
+                            
                 
                 
                 if (player.CurrentLocation.Killable && currentLocationQuestIsActive)
