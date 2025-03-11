@@ -12,6 +12,7 @@ namespace _2425_OP34_Group2_Project_Alpha
 
             while (gameRunning)
             {
+                Console.Clear();
                 Console.WriteLine("What would you like to do (enter a number)?");
                 Console.WriteLine($"You are at: {player.CurrentLocation.Name}.");
                 Console.WriteLine(player.CurrentLocation.Description);
@@ -91,6 +92,7 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         private static void SeeGameStats()
         {
+            Console.Clear();
             Console.WriteLine("Displaying stats...");
             Console.WriteLine($"HP: {player.CurrentHitPoints}/{player.MaximumHitPoints}");
             Console.WriteLine($"Weapon: {player.CurrentWeapon.Name} (Max Damage: {player.CurrentWeapon.MaximumDamage})");
@@ -108,6 +110,9 @@ namespace _2425_OP34_Group2_Project_Alpha
                     Console.WriteLine($"- {quest.Name}: {quest.Description}");
                 }
             }
+
+            Console.WriteLine("Press enter to continue...");
+            Console.ReadLine();
         }
 
         private static void Move()
@@ -120,6 +125,7 @@ namespace _2425_OP34_Group2_Project_Alpha
              * |  H   |
              * +------+
             */
+            Console.Clear();
             Console.WriteLine("\nWhere would you like to go? (N/E/S/W)");
             Console.WriteLine($"You are at: {player.CurrentLocation.Name}.");
             player.CurrentLocation.Compass();
