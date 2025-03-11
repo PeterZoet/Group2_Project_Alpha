@@ -19,23 +19,22 @@ namespace _2425_OP34_Group2_Project_Alpha
                 {
                     "See game stats",
                     "Move"
-                };
-                            
+                };            
                 
                 
-                if (player.CurrentLocation.Killable && currentLocationQuestIsActive)
+                if (player.CurrentLocation.Killable)
                 {
                     options.Add("Fight");
                 }
                 
                  
                 Quest locationQuest = player.CurrentLocation.QuestAvailableHere;
-                if (locationQuest != null && !PlayerQuest.ActiveQuests.Contains(locationQuest) && !PlayerQuest.CompletedQuests.Contains(locationQuest))
+                if (locationQuest != null &&  (PlayerQuest.ActiveQuest == null) && !PlayerQuest.CompletedQuests.Contains(locationQuest))
                 {
                     options.Add("Start Quest");
                 }
                 
-                if (locationQuest != null && PlayerQuest.ActiveQuests.Contains(locationQuest))
+                if (locationQuest != null && (PlayerQuest.ActiveQuest != null))
                 {
                     options.Add("Flee Quest");
                 }
@@ -96,18 +95,15 @@ namespace _2425_OP34_Group2_Project_Alpha
             Console.WriteLine($"HP: {player.CurrentHitPoints}/{player.MaximumHitPoints}");
             Console.WriteLine($"Weapon: {player.CurrentWeapon.Name} (Max Damage: {player.CurrentWeapon.MaximumDamage})");
             
-            // Display active quests
+            // Display active quest
             Console.WriteLine("\nActive Quests:");
-            if (PlayerQuest.ActiveQuests.Count == 0)
+            if (PlayerQuest.ActiveQuest != null)
             {
                 Console.WriteLine("None");
             }
             else
             {
-                foreach (var quest in PlayerQuest.ActiveQuests)
-                {
-                    Console.WriteLine($"- {quest.Name}: {quest.Description}");
-                }
+                Console.WriteLine($"- {PlayerQuest.ActiveQuest?.Name}: {PlayerQuest.ActiveQuest?.Description}");                
             }
         }
 
