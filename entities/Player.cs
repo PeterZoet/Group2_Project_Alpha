@@ -3,6 +3,7 @@ public class Player
 {
     public int CurrentHitPoints;
     public int MaximumHitPoints;
+    public int Coins;
     public Weapon CurrentWeapon { get; set; }
     public Location CurrentLocation { get; set; }
     private Location _previousLocation;
@@ -14,6 +15,7 @@ public class Player
         CurrentWeapon = currentWeapon;
         CurrentLocation = startLocation;
         _previousLocation = startLocation;
+        Coins = 0;
     }
 
     public void MoveTo(Location? newLocation)
