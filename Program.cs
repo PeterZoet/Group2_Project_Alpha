@@ -284,59 +284,90 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine($"   Monster: {(location.MonsterLivingHere != null ? $"{location.MonsterLivingHere.Name} - id {location.MonsterLivingHere.ID}" : "None")}\n");
             }
         }
+        
         private static void OpenInventory()
         {
+            Console.Clear();
             Console.WriteLine("Inventory:");
-            foreach (Item item in player.Inventory)
+            
+            if (player.Inventory.Count == 0)
             {
-                if (item is Weapon)
-                {
-                    Weapon weapon = (Weapon)item;
-                    Console.WriteLine($"{weapon.ID}. {item.Name} - (Damage: {weapon.MaximumDamage})");
-                }
-                else
-                {
-                    Console.WriteLine($"{item.Name}");
-                }
+                Console.WriteLine("Your inventory is empty.");
             }
-        
-            Console.WriteLine("What would you like to do?");
-            Console.WriteLine("1. Use an item");
-            Console.WriteLine("2. Close inventory");
-        
-            string input = Console.ReadLine();
-        
-            switch (input)
+            else
             {
-                case "1":
-                    UseItem();
-                    break;
-                case "2":
-                    break;
-                default:
-                    Console.WriteLine("Invalid input. Please try again.");
-                    OpenInventory();
-                    break;
+                for (int i = 0; i < player.Inventory.Count; i++)
+                {
+                    Item item = player.Inventory[i];
+                    if (item is Weapon weapon)
+                    {
+                        string equippedStatus = (player.CurrentWeapon == weapon) ? " [EQUIPPED]" : "";
+                        Console.WriteLine($"{i + 1}. {item.Name} - (Damage: {weapon.MaximumDamage}){equippedStatus}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{i + 1}. {item.Name}");
+                    }
+                }
+            
+                Console.WriteLine("\nWhat would you like to do?");
+                Console.WriteLine("1. Use/equip an item");
+                Console.WriteLine("2. Close inventory");
+            
+                string input = Console.ReadLine();
+            
+                switch (input)
+                {
+                    case "1":
+                        UseItem();
+                        break;
+                    case "2":
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input. Please try again.");
+                        Console.WriteLine("Press enter to continue...");
+                        Console.ReadLine();
+                        OpenInventory();
+                        break;
+                }
             }
         }
+        
         private static void UseItem()
         {
             Console.WriteLine("Which item would you like to use?");
             for (int i = 0; i < player.Inventory.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {player.Inventory[i].Name}");
+                Item item = player.Inventory[i];
+                if (item is Weapon weapon)
+                {
+                    Console.WriteLine($"{i + 1}. {item.Name} (Weapon - Damage: {weapon.MaximumDamage})");
+                }
+                else
+                {
+                    Console.WriteLine($"{i + 1}. {item.Name}");
+                }
             }
-        
+            
             string input = Console.ReadLine();
-        
+            
             if (int.TryParse(input, out int index) && index > 0 && index <= player.Inventory.Count)
             {
                 Item item = player.Inventory[index - 1];
-
-                Console.WriteLine($"You used {item.Name}.");
-        
-
-                player.Inventory.RemoveAt(index - 1);
+                
+                if (item is Weapon weapon)
+                {
+                    player.CurrentWeapon = weapon;
+                    Console.WriteLine($"You equipped {weapon.Name}.");
+                }
+                else
+                {
+                    Console.WriteLine($"You used {item.Name}.");
+                    player.Inventory.RemoveAt(index - 1);
+                }
+                
+                Console.WriteLine("Press enter to continue...");
+                Console.ReadLine();
             }
             else
             {
@@ -344,6 +375,5 @@ namespace _2425_OP34_Group2_Project_Alpha
                 UseItem();
             }
         }
-
-        }
     }
+}

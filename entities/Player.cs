@@ -19,8 +19,9 @@ public class Player
         _previousLocation = startLocation;
         Coins = 4;
         Inventory = new List<Item>();
-        Inventory.Add(new Item("Healing Potion"));
         Inventory.Add(new Weapon(World.WEAPON_ID_RUSTY_SWORD,"Rusty Sword", 5));
+        Inventory.Add(new Weapon(World.WEAPON_ID_CLUB, "Club", 10));
+        Inventory.Add(new Item("Healing Potion"));
         
     }
 
