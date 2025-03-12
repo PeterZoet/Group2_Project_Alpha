@@ -219,12 +219,19 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine($"\nYou have {player.CurrentHitPoints}HP");
 
                 Console.WriteLine($"\nBe aware the {baseMonster.Name}s will retaliate and deal between 1-{selectedMonster.MaximumDamage}HP of damage each!");
-                Console.WriteLine($"Would you like to strike with your {player.CurrentWeapon.Name}? (1-{player.CurrentWeapon.MaximumDamage} dmg) \nIf not the fight will be reset!");
+                Console.WriteLine($"Would you like to strike with your {player.CurrentWeapon.Name}? (1-{player.CurrentWeapon.MaximumDamage} dmg)");
+                Console.WriteLine($"\n(NOTE: If you dicide to flee, the current quest will be canceld and monsters reset)");
                 string attackChoice = GetValidInput(["Y", "N"]);
 
                 if (attackChoice == "N")
                 {
+                    PlayerQuest.ActiveQuest = null;
+                    Console.Clear();
                     Console.WriteLine("You fled from the fight! Come back when you're stronger.");
+                    Console.WriteLine("Hint: find a place to heal!");
+
+                    Console.WriteLine("Press enter to continue...");
+                    Console.ReadLine();
                     return;
                 }
 
