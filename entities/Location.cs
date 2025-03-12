@@ -9,6 +9,7 @@ public class Location
     public bool Killable { get; set; } //In this location you can kill something
     public Quest QuestAvailableHere { get; set; }
     public Monster MonsterLivingHere { get; set; }
+    public Witch WitchAvailableHere { get; set; }
 
     // Neighboring locations (can be assigned after creation)
     public Location? LocationToNorth { get; set; }
@@ -17,7 +18,7 @@ public class Location
     public Location? LocationToWest { get; set; }
 
     // Constructor to initialize required fields
-    public Location(int id, string name, string description, bool interactable, bool killable, Quest questAvailableHere, Monster monsterLivingHere)
+    public Location(int id, string name, string description, bool interactable, bool killable, Quest questAvailableHere, Monster monsterLivingHere, Witch witchAvailableHere)
     {
         ID = id;
         Name = name;
@@ -25,6 +26,7 @@ public class Location
         Killable = killable;
         QuestAvailableHere = questAvailableHere;
         MonsterLivingHere = monsterLivingHere;
+        WitchAvailableHere = witchAvailableHere;
     }
 
     public void Compass()

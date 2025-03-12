@@ -28,6 +28,11 @@ namespace _2425_OP34_Group2_Project_Alpha
                     options.Add("Fight");
                 }
                 
+                // If current location has a witch npc
+                if (player.CurrentLocation.WitchAvailableHere != null)
+                {
+                    options.Add("Talk to Witch");
+                }
                  
                 Quest locationQuest = player.CurrentLocation.QuestAvailableHere;
                 if (locationQuest != null &&  (PlayerQuest.ActiveQuest == null) && !PlayerQuest.CompletedQuests.Contains(locationQuest))
@@ -87,6 +92,9 @@ namespace _2425_OP34_Group2_Project_Alpha
                     break;
                 case "Open inventory":
                     OpenInventory();
+                    break;
+                case "Talk to Witch":
+                    TalkToWitch(player.CurrentLocation.WitchAvailableHere);
                     break;
                 case "Quit":
                     Console.WriteLine("--------------------\nSee you next time!\n--------------------");
@@ -191,7 +199,57 @@ namespace _2425_OP34_Group2_Project_Alpha
             Console.ReadLine();
             
         }
-        
+
+        private static void TalkToWitch(Witch witch)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"Talking to {witch.Name} The Witch...");
+
+                Console.WriteLine("\nAh, a weary traveler! The winds whisper of your journey... let me mend your wounds and share my wares for just a few coins.\n");
+
+                Console.WriteLine($"Health Points: {player.CurrentHitPoints}/{player.MaximumHitPoints}");
+                Console.WriteLine($"Coin Balance: {player.Coins} 🪙\n");
+                
+                Console.WriteLine("1: Small Heal (30HP) - Free");
+                Console.WriteLine("2: Medium heal (60HP) - 2 🪙");
+                Console.WriteLine("3: Full Heal - 4 🪙");
+                Console.WriteLine("4: View Shop");
+                Console.WriteLine("5: Return");
+                Console.WriteLine("Enter a valid option: 1, 2, 3, 4, 5");
+
+                string choice = Console.ReadLine();
+                switch (choice)
+                {
+                    case "1":
+                        // Small Heal
+                        witch.HealToAmount(player, 30, 0);
+                        break;
+                    case "2":
+                        witch.HealToAmount(player, 60, 2);
+                        break;
+                    case "3":
+                        witch.FullHeal(player, 4);
+                        break;
+                    case "4":
+                        OpenShop(witch);
+                        break;
+                    case "5":
+                        return;
+                    default:
+                        Console.WriteLine("Invalid choice, press Enter to continue...");
+                        Console.ReadLine();
+                        break;
+                }
+            }
+        }
+
+        private static void OpenShop(Witch witch)
+        {
+            Console.WriteLine("Witch shop");
+            Thread.Sleep(2000); // Pause application for 2 sec (Remove later: using for testing purposes)
+        }
     
         private static bool ValidateInput(string? input, List<string> options)
         {
