@@ -22,6 +22,20 @@ public class Player
         
     }
 
+    public void TakeDamage(int damage)
+    {
+        CurrentHitPoints -= damage;
+        if (CurrentHitPoints < 0)
+        {
+            CurrentHitPoints = 0;
+        }
+    }
+
+    public bool IsAlive()
+    {
+        return CurrentHitPoints > 0;
+    }
+
     public void MoveTo(Location? newLocation)
     {
         if (newLocation == null)

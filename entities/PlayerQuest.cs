@@ -28,4 +28,14 @@ public class PlayerQuest
             quest.FleeQuest();
         }
     }
+
+    public static void CompleteQuest(Quest quest)
+    {
+        if (quest != null)
+        {
+            ActiveQuest = null;
+            CompletedQuests.Add(quest);
+            quest.CompleteQuest();
+        }
+    }
 }

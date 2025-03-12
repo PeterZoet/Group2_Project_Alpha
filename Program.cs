@@ -148,8 +148,48 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         private static void Fight()
         {
-            Console.WriteLine("Fighting a monster if there is one...");
-            Thread.Sleep(2000); // Pause application for 2 sec (Remove later: using for testing purposes)
+            Monster monsterToFight = player.CurrentLocation.MonsterLivingHere;
+            Console.WriteLine($"\nYou are about to fight a: {player.CurrentLocation.MonsterLivingHere.Name}");
+            Console.WriteLine($"\nBoss HP: {monsterToFight.CurrentHitPoints}");
+            Console.WriteLine("\nDo you want to attack it?\n");
+            string choice = GetValidInput(["Y","N"]);
+
+            if (choice == "N")
+            {
+                return;
+            }
+
+            Console.Clear();
+
+            while (monsterToFight.IsAlive())
+            {
+                Console.WriteLine($"Would you like to attack the {monsterToFight.Name} with your {player.CurrentWeapon.Name}?");
+                string conChoiche = GetValidInput(["Y","N"]);
+
+                if (conChoiche == "N")
+                {
+                    Console.WriteLine($"You fled from the fight, come back if you are stronger/healed!");
+                    return;
+                }
+
+                int Attack = player.CurrentWeapon.MaximumDamage;
+                int damage = monsterToFight.random.Next(1, Attack + 1);
+                int damageToPlayer = monsterToFight.Attack();
+
+                player.TakeDamage(damageToPlayer);
+                monsterToFight.TakeDamage(damage);
+
+
+                Console.WriteLine($"\nBoss HP: {monsterToFight.CurrentHitPoints}");
+                Console.WriteLine($"Damage done to boss: {damage}hp");
+                Console.WriteLine($"\nYour HP: {player.CurrentHitPoints}");
+                Console.WriteLine($"boss hurt you for: {damageToPlayer}hp");
+            }
+            PlayerQuest.CompleteQuest(PlayerQuest.ActiveQuest);
+            Console.WriteLine("\nBoss defeated!");
+            Console.WriteLine("Press enter to continue...");
+            Console.ReadLine();
+            
         }
         
     
