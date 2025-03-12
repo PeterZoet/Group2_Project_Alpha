@@ -262,22 +262,6 @@ namespace _2425_OP34_Group2_Project_Alpha
                 //1 keer takedamage callen in plaats van 3 keer
                 player.TakeDamage(monsterDamageLog.Values.Sum());
                 
-                Console.Clear();
-                Console.WriteLine($"\nYou swing your {player.CurrentWeapon.Name} with all your might!");
-                Console.WriteLine($"You hit {selectedMonster.Name}, dealing {damageDealt}HP damage! {(selectedMonster.IsAlive() ? $"It lives with {selectedMonster.CurrentHitPoints}HP left!" : "It collapses, defeated!")}");
-
-                Console.WriteLine($"\nThe monsters retaliate, hurting you for {monsterDamageLog.Values.Sum()}HP in total!");
-                
-                foreach (var entry in monsterDamageLog)
-                {
-                    Console.WriteLine($"    -{entry.Key} dealt {entry.Value}HP of damage.");
-                }
-
-                Console.WriteLine($"\nYour current HP: {player.CurrentHitPoints}");
-
-                Console.WriteLine("\nPress Enter to continue...");
-                Console.ReadLine();
-
                 if (!player.IsAlive())
                 {
                     List<string> deathMessages = new List<string>
@@ -304,6 +288,22 @@ namespace _2425_OP34_Group2_Project_Alpha
                     restartGame();
                     return;
                 }
+                
+                Console.Clear();
+                Console.WriteLine($"\nYou swing your {player.CurrentWeapon.Name} with all your might!");
+                Console.WriteLine($"You hit {selectedMonster.Name}, dealing {damageDealt}HP damage! {(selectedMonster.IsAlive() ? $"It lives with {selectedMonster.CurrentHitPoints}HP left!" : "It collapses, defeated!")}");
+
+                Console.WriteLine($"\nThe monsters retaliate, hurting you for {monsterDamageLog.Values.Sum()}HP in total!");
+                
+                foreach (var entry in monsterDamageLog)
+                {
+                    Console.WriteLine($"    -{entry.Key} dealt {entry.Value}HP of damage.");
+                }
+
+                Console.WriteLine($"\nYour current HP: {player.CurrentHitPoints}");
+
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
             }
             Console.WriteLine("\n+----------------------+");
             Console.WriteLine($"All monsters defeated! You stand victorious amidst the fallen beasts!\nYou completed the quest {PlayerQuest.ActiveQuest!.Name}");
@@ -319,7 +319,8 @@ namespace _2425_OP34_Group2_Project_Alpha
         private static void restartGame()
         {
             player.CurrentLocation = World.Locations[0];
-            PlayerQuest.CompletedQuests = null;
+            PlayerQuest.CompletedQuests = [];
+            player = new(World.Weapons[0], World.Locations[0]);
         }
 
         private static void TalkToWitch(Witch witch)
