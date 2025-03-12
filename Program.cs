@@ -120,6 +120,11 @@ namespace _2425_OP34_Group2_Project_Alpha
             {
                 Console.WriteLine($"- {PlayerQuest.ActiveQuest?.Name}: {PlayerQuest.ActiveQuest?.Description}");                
             }
+            Console.WriteLine("\nCompleted Quests:");
+            foreach (Quest quest in PlayerQuest.CompletedQuests)
+            {
+                Console.WriteLine(quest.Name);
+            }
 
             Console.WriteLine("Press enter to continue...");
             Console.ReadLine();

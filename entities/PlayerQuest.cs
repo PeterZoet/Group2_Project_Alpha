@@ -37,5 +37,12 @@ public class PlayerQuest
             CompletedQuests.Add(quest);
             quest.CompleteQuest();
         }
+
+        if (PlayerQuest.CompletedQuests.Count == 2)
+        {
+            Location guardPost = World.LocationByID(3);
+            Location bridge = World.LocationByID(8);
+            guardPost.LocationToEast = bridge;
+        }
     }
 }
