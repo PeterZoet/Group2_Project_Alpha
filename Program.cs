@@ -3,11 +3,10 @@ namespace _2425_OP34_Group2_Project_Alpha
 {
     class Program
     {
-        static Player player = new(World.Weapons[0], World.Locations[0]);
+        static public Player player = new(World.Weapons[0], World.Locations[0]);
 
         static void Main()
         {
-            DisplayWorldAttributes(); //dev-only
             bool gameRunning = true;
 
             while (gameRunning)
@@ -24,7 +23,7 @@ namespace _2425_OP34_Group2_Project_Alpha
                     "Open inventory"
                 };
                 
-                if (player.CurrentLocation.Killable)
+                if (player.CurrentLocation.Killable && player._previousLocation.QuestAvailableHere == PlayerQuest.ActiveQuest)
                 {
                     options.Add("Fight");
                 }
@@ -36,12 +35,12 @@ namespace _2425_OP34_Group2_Project_Alpha
                 }
                  
                 Quest locationQuest = player.CurrentLocation.QuestAvailableHere;
-                if (locationQuest != null && !PlayerQuest.ActiveQuests.Contains(locationQuest) && !PlayerQuest.CompletedQuests.Contains(locationQuest))
+                if (locationQuest != null &&  (PlayerQuest.ActiveQuest == null) && !PlayerQuest.CompletedQuests.Contains(locationQuest))
                 {
                     options.Add("Start Quest");
                 }
                 
-                if (locationQuest != null && PlayerQuest.ActiveQuests.Contains(locationQuest))
+                if (locationQuest != null && (PlayerQuest.ActiveQuest != null))
                 {
                     options.Add("Flee Quest");
                 }
@@ -85,6 +84,8 @@ namespace _2425_OP34_Group2_Project_Alpha
                     break;
                 case "Start Quest":
                     PlayerQuest.StartQuest(player.CurrentLocation.QuestAvailableHere);
+                    Console.WriteLine("Press enter to continue...");
+                    Console.ReadLine();
                     break;
                 case "Flee Quest":
                     PlayerQuest.FleeQuest(player.CurrentLocation.QuestAvailableHere);
@@ -109,18 +110,15 @@ namespace _2425_OP34_Group2_Project_Alpha
             Console.WriteLine($"HP: {player.CurrentHitPoints}/{player.MaximumHitPoints}");
             Console.WriteLine($"Weapon: {player.CurrentWeapon.Name} (Max Damage: {player.CurrentWeapon.MaximumDamage})");
             
-            // Display active quests
+            // Display active quest
             Console.WriteLine("\nActive Quests:");
-            if (PlayerQuest.ActiveQuests.Count == 0)
+            if (PlayerQuest.ActiveQuest == null)
             {
                 Console.WriteLine("None");
             }
             else
             {
-                foreach (var quest in PlayerQuest.ActiveQuests)
-                {
-                    Console.WriteLine($"- {quest.Name}: {quest.Description}");
-                }
+                Console.WriteLine($"- {PlayerQuest.ActiveQuest?.Name}: {PlayerQuest.ActiveQuest?.Description}");                
             }
 
             Console.WriteLine("Press enter to continue...");
@@ -158,8 +156,48 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         private static void Fight()
         {
-            Console.WriteLine("Fighting a monster if there is one...");
-            Thread.Sleep(2000); // Pause application for 2 sec (Remove later: using for testing purposes)
+            Monster monsterToFight = player.CurrentLocation.MonsterLivingHere;
+            Console.WriteLine($"\nYou are about to fight a: {player.CurrentLocation.MonsterLivingHere.Name}");
+            Console.WriteLine($"\nBoss HP: {monsterToFight.CurrentHitPoints}");
+            Console.WriteLine("\nDo you want to attack it?\n");
+            string choice = GetValidInput(["Y","N"]);
+
+            if (choice == "N")
+            {
+                return;
+            }
+
+            Console.Clear();
+
+            while (monsterToFight.IsAlive())
+            {
+                Console.WriteLine($"Would you like to attack the {monsterToFight.Name} with your {player.CurrentWeapon.Name}?");
+                string conChoiche = GetValidInput(["Y","N"]);
+
+                if (conChoiche == "N")
+                {
+                    Console.WriteLine($"You fled from the fight, come back if you are stronger/healed!");
+                    return;
+                }
+
+                int Attack = player.CurrentWeapon.MaximumDamage;
+                int damage = monsterToFight.random.Next(1, Attack + 1);
+                int damageToPlayer = monsterToFight.Attack();
+
+                player.TakeDamage(damageToPlayer);
+                monsterToFight.TakeDamage(damage);
+
+
+                Console.WriteLine($"\nBoss HP: {monsterToFight.CurrentHitPoints}");
+                Console.WriteLine($"Damage done to boss: {damage}hp");
+                Console.WriteLine($"\nYour HP: {player.CurrentHitPoints}");
+                Console.WriteLine($"boss hurt you for: {damageToPlayer}hp");
+            }
+            PlayerQuest.CompleteQuest(PlayerQuest.ActiveQuest);
+            Console.WriteLine("\nBoss defeated!");
+            Console.WriteLine("Press enter to continue...");
+            Console.ReadLine();
+            
         }
 
         private static void TalkToWitch(Witch witch)

@@ -5,7 +5,7 @@ public class Quest
     public int ID { get; }
     public string Name { get; }
     public string Description { get; }
-    public bool IsActive { get; private set; }
+    public bool IsActive { get; set; }
     public bool IsCompleted { get; private set; }
     public bool WasStarted { get; private set; }
 

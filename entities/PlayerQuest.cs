@@ -1,15 +1,15 @@
 namespace entities;
 public class PlayerQuest
 {
-    public static List<Quest> ActiveQuests { get; } = new List<Quest>();
+    public static Quest? ActiveQuest { get; set; }
     public static List<Quest> CompletedQuests { get; } = new List<Quest>();
 
     public static void StartQuest(Quest quest)
     {
-        if (quest != null && !ActiveQuests.Contains(quest) && !CompletedQuests.Contains(quest))
+        if (quest != null && !CompletedQuests.Contains(quest))
         {
+            ActiveQuest = quest;
             quest.StartQuest();
-            ActiveQuests.Add(quest);
         }
         else if (CompletedQuests.Contains(quest))
         {
@@ -23,10 +23,19 @@ public class PlayerQuest
 
     public static void FleeQuest(Quest quest)
     {
-        if (quest != null && ActiveQuests.Contains(quest))
+        if (quest != null)
         {
             quest.FleeQuest();
-            ActiveQuests.Remove(quest);
+        }
+    }
+
+    public static void CompleteQuest(Quest quest)
+    {
+        if (quest != null)
+        {
+            ActiveQuest = null;
+            CompletedQuests.Add(quest);
+            quest.CompleteQuest();
         }
     }
 }

@@ -6,7 +6,7 @@ public class Player
     public int Coins;
     public Weapon CurrentWeapon { get; set; }
     public Location CurrentLocation { get; set; }
-    private Location _previousLocation;
+    public Location _previousLocation { get; set; }
     public List<Item> Inventory { get; set; }
     
 
@@ -24,6 +24,20 @@ public class Player
         
     }
 
+    public void TakeDamage(int damage)
+    {
+        CurrentHitPoints -= damage;
+        if (CurrentHitPoints < 0)
+        {
+            CurrentHitPoints = 0;
+        }
+    }
+
+    public bool IsAlive()
+    {
+        return CurrentHitPoints > 0;
+    }
+
     public void MoveTo(Location? newLocation)
     {
         if (newLocation == null)
@@ -31,15 +45,15 @@ public class Player
             Console.WriteLine("You did not move because there is no location in the chosen direction!");
             return;
         }
-
+        
         // Cancel active quests if leaving the area
-        if (CurrentLocation.QuestAvailableHere != null &&
-            PlayerQuest.ActiveQuests.Contains(CurrentLocation.QuestAvailableHere))
+        if (CurrentLocation.QuestAvailableHere != null && PlayerQuest.ActiveQuest == CurrentLocation.QuestAvailableHere)
         {
             Quest questToCancel = CurrentLocation.QuestAvailableHere;
             PlayerQuest.FleeQuest(questToCancel);
+            Console.WriteLine($"You left the area, so the quest '{questToCancel.Name}' has been cancelled.");
         }
-
+        
         _previousLocation = CurrentLocation;
         CurrentLocation = newLocation;
     }
