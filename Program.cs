@@ -189,7 +189,7 @@ namespace _2425_OP34_Group2_Project_Alpha
 
             while (monstersToFight.Any(m => m.IsAlive()) && player.IsAlive())
             {
-                Console.WriteLine("Which monster do you want to attack? (1, 2, or 3)");
+                Console.WriteLine($"Which monster do you want to attack? (1: {monstersToFight[0].Name} ({monstersToFight[0].CurrentHitPoints}), 2: {monstersToFight[1].Name} ({monstersToFight[0].CurrentHitPoints}), or 3: {monstersToFight[2].Name} ({monstersToFight[0].CurrentHitPoints}),)");
                 int selectedMonsterIndex = int.Parse(GetValidInput([ "1", "2", "3"])) - 1;
                 Monster selectedMonster = monstersToFight[selectedMonsterIndex];
 
@@ -258,9 +258,8 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine("3: Full Heal - 4 🪙");
                 Console.WriteLine("4: View Shop");
                 Console.WriteLine("5: Return");
-                Console.WriteLine("Enter a valid option: 1, 2, 3, 4, 5");
 
-                string choice = Console.ReadLine();
+                string choice = GetValidInput(["1", "2", "3", "4", "5"]);
                 switch (choice)
                 {
                     case "1":
@@ -302,7 +301,7 @@ namespace _2425_OP34_Group2_Project_Alpha
             string? input;
             do
             {
-                Console.WriteLine($"Enter a valid option: {string.Join(", ", validOptions)}");
+                Console.WriteLine($"\n-------------\nEnter a valid option: {string.Join(", ", validOptions)}");
                 input = Console.ReadLine()?.ToUpper();
             } while (!ValidateInput(input, validOptions));
 
@@ -345,7 +344,7 @@ namespace _2425_OP34_Group2_Project_Alpha
             Console.WriteLine("1. Use an item");
             Console.WriteLine("2. Close inventory");
         
-            string input = Console.ReadLine();
+            string input = GetValidInput(["1", "2"]);
         
             switch (input)
             {
@@ -362,13 +361,16 @@ namespace _2425_OP34_Group2_Project_Alpha
         }
         private static void UseItem()
         {
+            List<string> optionString = new();
+
             Console.WriteLine("Which item would you like to use?");
             for (int i = 0; i < player.Inventory.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {player.Inventory[i].Name}");
+                optionString.Add($"{i + 1}");
             }
         
-            string input = Console.ReadLine();
+            string input = GetValidInput([]);
         
             if (int.TryParse(input, out int index) && index > 0 && index <= player.Inventory.Count)
             {
