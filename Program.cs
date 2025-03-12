@@ -156,11 +156,24 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         private static void Fight()
         {
-            Monster monsterToFight = player.CurrentLocation.MonsterLivingHere;
-            Console.WriteLine($"\nYou are about to fight a: {player.CurrentLocation.MonsterLivingHere.Name}");
-            Console.WriteLine($"\nBoss HP: {monsterToFight.CurrentHitPoints}");
-            Console.WriteLine("\nDo you want to attack it?\n");
-            string choice = GetValidInput(["Y","N"]);
+            Monster baseMonster = player.CurrentLocation.MonsterLivingHere;
+
+            List<Monster> monstersToFight = new List<Monster>
+            {
+                new Monster(baseMonster.ID, baseMonster.Name, baseMonster.MaximumHitPoints, baseMonster.CurrentHitPoints),
+                new Monster(baseMonster.ID, baseMonster.Name, baseMonster.MaximumHitPoints, baseMonster.CurrentHitPoints),
+                new Monster(baseMonster.ID, baseMonster.Name, baseMonster.MaximumHitPoints, baseMonster.CurrentHitPoints)
+            };
+
+            Console.WriteLine($"\nYou are about to fight three {baseMonster.Name}s!");
+
+            for (int i = 0; i < monstersToFight.Count; i++)
+            {
+                Console.WriteLine($"Monster {i + 1}: HP {monstersToFight[i].CurrentHitPoints}");
+            }
+
+            Console.WriteLine("\nDo you want to attack them? (Y/N)");
+            string choice = GetValidInput(["Y", "N"]);
 
             if (choice == "N")
             {
@@ -169,35 +182,58 @@ namespace _2425_OP34_Group2_Project_Alpha
 
             Console.Clear();
 
-            while (monsterToFight.IsAlive())
+            while (monstersToFight.Any(m => m.IsAlive()) && player.IsAlive())
             {
-                Console.WriteLine($"Would you like to attack the {monsterToFight.Name} with your {player.CurrentWeapon.Name}?");
-                string conChoiche = GetValidInput(["Y","N"]);
+                Console.WriteLine("Which monster do you want to attack? (1, 2, or 3)");
+                int selectedMonsterIndex = int.Parse(GetValidInput([ "1", "2", "3"])) - 1;
+                Monster selectedMonster = monstersToFight[selectedMonsterIndex];
 
-                if (conChoiche == "N")
+                if (!selectedMonster.IsAlive())
                 {
-                    Console.WriteLine($"You fled from the fight, come back if you are stronger/healed!");
+                    Console.WriteLine("That monster is already defeated! Choose another.");
+                    continue;
+                }
+
+                Console.WriteLine($"Would you like to attack the {selectedMonster.Name} with your {player.CurrentWeapon.Name}? (Y/N)");
+                Console.WriteLine($"The {selectedMonster.Name} will attack you in damage range 1-{selectedMonster.MaximumDamage}");
+                string attackChoice = GetValidInput(["Y", "N"]);
+
+                if (attackChoice == "N")
+                {
+                    Console.WriteLine("You fled from the fight! Come back when you're stronger.");
                     return;
                 }
 
-                int Attack = player.CurrentWeapon.MaximumDamage;
-                int damage = monsterToFight.random.Next(1, Attack + 1);
-                int damageToPlayer = monsterToFight.Attack();
+                int damage = player.CurrentWeapon.MaximumDamage;
+                int damageDealt = selectedMonster.random.Next(1, damage + 1);
+                int damageToPlayer = selectedMonster.Attack();
 
                 player.TakeDamage(damageToPlayer);
-                monsterToFight.TakeDamage(damage);
+                selectedMonster.TakeDamage(damageDealt);
 
-
-                Console.WriteLine($"\nBoss HP: {monsterToFight.CurrentHitPoints}");
-                Console.WriteLine($"Damage done to boss: {damage}hp");
+                Console.WriteLine($"\nMonster {selectedMonsterIndex + 1} HP: {selectedMonster.CurrentHitPoints}");
+                Console.WriteLine($"Damage dealt: {damageDealt} HP");
                 Console.WriteLine($"\nYour HP: {player.CurrentHitPoints}");
-                Console.WriteLine($"boss hurt you for: {damageToPlayer}hp");
+                Console.WriteLine($"Monster hurt you for: {damageToPlayer} HP");
+
+                if (!player.IsAlive())
+                {
+                    restartGame();
+                    return;
+                }
             }
+
+            Console.WriteLine("\nAll monsters defeated!");
             PlayerQuest.CompleteQuest(PlayerQuest.ActiveQuest);
-            Console.WriteLine("\nBoss defeated!");
-            Console.WriteLine("Press enter to continue...");
+            Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
-            
+        }
+
+
+        private static void restartGame()
+        {
+            player.CurrentLocation = World.Locations[0];
+            PlayerQuest.CompletedQuests = null;
         }
 
         private static void TalkToWitch(Witch witch)

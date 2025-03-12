@@ -2,7 +2,7 @@ namespace entities;
 public class PlayerQuest
 {
     public static Quest? ActiveQuest { get; set; }
-    public static List<Quest> CompletedQuests { get; } = new List<Quest>();
+    public static List<Quest> CompletedQuests { get; set;} = new List<Quest>();
 
     public static void StartQuest(Quest quest)
     {
