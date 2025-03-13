@@ -290,16 +290,16 @@ namespace _2425_OP34_Group2_Project_Alpha
                 {
                     List<string> deathMessages = new List<string>
                     {
-                        "\nYour vision blurs... A chilling numbness creeps over you... Then, nothing.",
-                        "\nYou collapse to the ground, your strength fading... Darkness consumes you.",
-                        "\nA sharp pain jolts through you—then silence. The battle is over... for you.",
-                        "\nYour knees buckle. The last thing you see is your foe standing victorious...",
-                        "\nA cold hand seems to grasp your soul as your body gives in to exhaustion...",
-                        "\nYou fought bravely, but fate had other plans. The world fades to black...",
-                        "\nYour breath grows shallow. A final whisper escapes your lips before everything ends...",
-                        "\nThe weight of battle is too much. You fall, unable to continue...",
-                        "\nAs your consciousness drifts away, a single thought lingers... ‘Is this the end?’",
-                        "\nDarkness envelops you. Your journey... has come to an end."
+                        "Your vision blurs... A chilling numbness creeps over you... Then, nothing.",
+                        "You collapse to the ground, your strength fading... Darkness consumes you.",
+                        "A sharp pain jolts through you—then silence. The battle is over... for you.",
+                        "Your knees buckle. The last thing you see is your foe standing victorious...",
+                        "A cold hand seems to grasp your soul as your body gives in to exhaustion...",
+                        "You fought bravely, but fate had other plans. The world fades to black...",
+                        "Your breath grows shallow. A final whisper escapes your lips before everything ends...",
+                        "The weight of battle is too much. You fall, unable to continue...",
+                        "As your consciousness drifts away, a single thought lingers... ‘Is this the end?’",
+                        "Darkness envelops you. Your journey... has come to an end."
                     };
 
                     // Select a random death message
@@ -307,7 +307,7 @@ namespace _2425_OP34_Group2_Project_Alpha
                     string deathMessage = deathMessages[rnd.Next(deathMessages.Count)];
                     Console.Clear();
                     Console.WriteLine(deathMessage);
-                    Console.WriteLine("\nPress Enter to continue...");
+                    YouDied();
                     Console.ReadLine();
                     restartGame();
                     return;
@@ -490,6 +490,32 @@ namespace _2425_OP34_Group2_Project_Alpha
             }
             
             Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
+        }
+
+        public static void YouDied()
+        {
+            Console.Title = "Players healt <= 0";
+
+            // ASCII Art Title
+            string title = @"
+
+
+
+            
+          _______               ______  _________ _______  ______   _ 
+|\     /|(  ___  )|\     /|    (  __  \ \__   __/(  ____ \(  __  \ ( )
+( \   / )| (   ) || )   ( |    | (  \  )   ) (   | (    \/| (  \  )| |
+ \ (_) / | |   | || |   | |    | |   ) |   | |   | (__    | |   ) || |
+  \   /  | |   | || |   | |    | |   | |   | |   |  __)   | |   | || |
+   ) (   | |   | || |   | |    | |   ) |   | |   | (      | |   ) |(_)
+   | |   | (___) || (___) |    | (__/  )___) (___| (____/\| (__/  ) _ 
+   \_/   (_______)(_______)    (______/ \_______/(_______/(______/ (_)
+                                                                      
+            ";
+            Console.WriteLine(title);
+
+            Console.WriteLine("\nPress enter to restart");
             Console.ReadLine();
         }
 
