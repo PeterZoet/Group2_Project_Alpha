@@ -34,7 +34,7 @@ public class Witch
             Console.WriteLine("1: Small Heal (30HP) - Free");
             Console.WriteLine("2: Medium heal (60HP) - 2 Coins");
             Console.WriteLine("3: Full Heal - 4 Coins");
-            Console.WriteLine("4: View Shop");
+            Console.WriteLine("4: View item shop");
             Console.WriteLine("5: Return");
 
             string choice = Program.GetValidInput(["1", "2", "3", "4", "5"]);
@@ -77,8 +77,9 @@ public class Witch
             List<string> optionString = new();
             for (int i = 0; i < ItemsForSale.Count; i++)
             {
-                optionString.Add($"{i}");
+                optionString.Add($"{i + 1}");
             }         
+                optionString.Add($"{ItemsForSale.Count + 1}");
 
             if (int.TryParse(Program.GetValidInput(optionString), out int itemNumber))
             {
