@@ -114,6 +114,7 @@ public class Witch
         if (player.Coins >= price)
         {
             player.Coins -= price;
+            player.Inventory.Add(item);
             Console.WriteLine($"You bought {item.Name} for {price} coins.");
         }
         else
