@@ -31,8 +31,21 @@ public class PlayerQuest
         }
     }
 
-    public static void CompleteQuest(Quest quest)
+    public static void CompleteQuest(Quest quest, Player player)
     {
+       Console.WriteLine("\n+------------------------------------------------+");
+        Console.WriteLine("QUEST COMPLETE!");  
+        Console.WriteLine("You stand triumphant over the fallen monsters!");  
+        Console.WriteLine($"Mission Accomplished: {PlayerQuest.ActiveQuest!.Name}");
+        Console.WriteLine("+------------------------------------------------+");
+        Console.WriteLine("You gained 10 Coins!");
+        if (quest?.ID == 2)
+        {
+            Console.WriteLine($"You obtained: {World.WeaponByID(2).Name} " +  
+            $"(Deals 1-{World.WeaponByID(2).MaximumDamage} HP damage)!");
+        }
+
+            
         if (quest != null)
         {
             ActiveQuest = null;
@@ -50,6 +63,13 @@ public class PlayerQuest
         if(PlayerQuest.CompletedQuests.Count == 3)
         {
             PlayerQuest.WinGame();
+        }
+
+        player.Coins += 10;
+
+        if(quest?.ID == 2)
+        {
+            player.Inventory.Add(World.WeaponByID(2));
         }
     }
 
