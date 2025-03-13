@@ -133,6 +133,7 @@ namespace _2425_OP34_Group2_Project_Alpha
             Console.WriteLine("Displaying stats...");
             Console.WriteLine($"HP: {player.CurrentHitPoints}/{player.MaximumHitPoints}");
             Console.WriteLine($"Weapon: {player.CurrentWeapon.Name} (Max Damage: {player.CurrentWeapon.MaximumDamage})");
+            Console.WriteLine($"Balance: {player.Coins} Coins");
             
             // Display active quest
             Console.WriteLine("\nActive Quests:");
