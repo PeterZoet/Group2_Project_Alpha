@@ -342,7 +342,7 @@ namespace _2425_OP34_Group2_Project_Alpha
         }
 
 
-        private static void restartGame()
+        public static void restartGame()
         {
             player.CurrentLocation = World.Locations[0];
             PlayerQuest.CompletedQuests = [];
