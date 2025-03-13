@@ -245,11 +245,11 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine($"\nYou have {player.CurrentHitPoints}HP");
 
                 Console.WriteLine($"\nBe aware the {baseMonster.Name}s will retaliate and deal between 1-{selectedMonster.MaximumDamage}HP of damage each!");
-                Console.WriteLine("What would you like to do?");
-                Console.WriteLine($"1: Attack with your {player.CurrentWeapon.Name} (1-{player.CurrentWeapon.MaximumDamage} dmg)");
+                Console.WriteLine($"Would you like to strike with your {player.CurrentWeapon.Name}? (1-{player.CurrentWeapon.MaximumDamage} dmg)");
+                Console.WriteLine($"\n(NOTE: If you dicide to flee, the current quest will be canceld and monsters reset)");
+                Console.WriteLine($"\n1: Attack with your {player.CurrentWeapon.Name} (1-{player.CurrentWeapon.MaximumDamage} dmg)");
                 Console.WriteLine("2: Use Item");
                 Console.WriteLine("3: Flee");
-                Console.WriteLine($"\n(NOTE: If you flee, the current quest will be canceled and monsters reset)");
         
                 string actionChoice = GetValidInput(["1", "2", "3"]);
 
