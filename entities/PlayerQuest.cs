@@ -1,8 +1,10 @@
+using _2425_OP34_Group2_Project_Alpha;
+
 namespace entities;
 public class PlayerQuest
 {
     public static Quest? ActiveQuest { get; set; }
-    public static List<Quest> CompletedQuests { get; set;} = new List<Quest>();
+    public static List<Quest> CompletedQuests { get; set; } = new List<Quest>();
 
     public static void StartQuest(Quest quest)
     {
@@ -44,5 +46,29 @@ public class PlayerQuest
             Location bridge = World.LocationByID(8);
             guardPost.LocationToEast = bridge;
         }
+
+        if(PlayerQuest.CompletedQuests.Count == 3)
+        {
+            PlayerQuest.WinGame();
+        }
     }
+
+    public static void WinGame()
+    {
+        Program.restartGame();
+        Console.Clear();
+        string youWonASCII = @"
+__   __           __        __          _ 
+\ \ / /__  _   _  \ \      / /__  _ __ | |
+ \ V / _ \| | | |  \ \ /\ / / _ \| '_ \| |
+  | | (_) | |_| |   \ V  V / (_) | | | |_|
+  |_|\___/ \__,_|    \_/\_/ \___/|_| |_(_)                                                         
+        ";
+
+        Console.WriteLine(youWonASCII);
+        Console.WriteLine("Congratulations on completing the game!");
+        Console.WriteLine("Press enter to play again...");
+        Console.ReadLine();
+    }
+    
 }
