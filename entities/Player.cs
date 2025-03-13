@@ -19,11 +19,7 @@ public class Player
         _previousLocation = startLocation;
         Coins = 4;
         Inventory = new List<Item>();
-        Inventory.Add(new Weapon(World.WEAPON_ID_RUSTY_SWORD,"Rusty Sword", 5));
-        Inventory.Add(new Weapon(World.WEAPON_ID_CLUB, "Club", 10));
-        Inventory.Add(new Item("Health Potion"));
-        Inventory.Add(new Item("Shield Potion"));
-        
+        Inventory.Add(new Weapon(World.WEAPON_ID_RUSTY_SWORD,"Rusty Sword", 5));   
     }
 
     public void TakeDamage(int damage)
