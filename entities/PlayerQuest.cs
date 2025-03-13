@@ -39,7 +39,7 @@ public class PlayerQuest
         Console.WriteLine($"Mission Accomplished: {PlayerQuest.ActiveQuest!.Name}");
         Console.WriteLine("+------------------------------------------------+");
         Console.WriteLine("You gained 10 Coins!");
-        if (quest?.ID == 2)
+        if (quest?.ID == 1)
         {
             Console.WriteLine($"You obtained: {World.WeaponByID(2).Name} " +  
             $"(Deals 1-{World.WeaponByID(2).MaximumDamage} HP damage)!");
@@ -67,7 +67,7 @@ public class PlayerQuest
 
         player.Coins += 10;
 
-        if(quest?.ID == 2)
+        if(quest?.ID == 1)
         {
             player.Inventory.Add(World.WeaponByID(2));
         }
