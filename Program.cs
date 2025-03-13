@@ -206,7 +206,7 @@ namespace _2425_OP34_Group2_Project_Alpha
             string choice = GetValidInput(["Y", "N"]);
 
             if (choice == "N")
-            {
+            {       
                 Console.WriteLine("\nYou cautiously step back into the shadows, avoiding the fight for now...");
 
                 Console.WriteLine("Press enter to continue...");
@@ -216,7 +216,7 @@ namespace _2425_OP34_Group2_Project_Alpha
 
             Console.Clear();
 
-            bool allMonstersAlive = monstersToFight.All(m => m.IsAlive());
+            bool allMonstersAlive = monstersToFight.Any(m => m.IsAlive());
 
             while (allMonstersAlive)
             {
@@ -230,7 +230,7 @@ namespace _2425_OP34_Group2_Project_Alpha
                         optionsToValidate.Add($"{i + 1}");
                     }
                 }
-                
+        
                 Console.Clear();
                 Console.WriteLine($"The battle rages on! Which monster will you target? {string.Join(", ", options)}");
 
@@ -247,9 +247,13 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine($"\nBe aware the {baseMonster.Name}s will retaliate and deal between 1-{selectedMonster.MaximumDamage}HP of damage each!");
                 Console.WriteLine($"Would you like to strike with your {player.CurrentWeapon.Name}? (1-{player.CurrentWeapon.MaximumDamage} dmg)");
                 Console.WriteLine($"\n(NOTE: If you dicide to flee, the current quest will be canceld and monsters reset)");
-                string attackChoice = GetValidInput(["Y", "N"]);
+                Console.WriteLine($"\n1: Attack with your {player.CurrentWeapon.Name} (1-{player.CurrentWeapon.MaximumDamage} dmg)");
+                Console.WriteLine("2: Use Item");
+                Console.WriteLine("3: Flee");
+        
+                string actionChoice = GetValidInput(["1", "2", "3"]);
 
-                if (attackChoice == "N")
+                if (actionChoice == "3") // Flee
                 {
                     PlayerQuest.ActiveQuest = null;
                     Console.Clear();
@@ -260,47 +264,75 @@ namespace _2425_OP34_Group2_Project_Alpha
                     Console.ReadLine();
                     return;
                 }
-
-                int damage = player.CurrentWeapon.MaximumDamage;
-                int damageDealt = selectedMonster.random.Next(1, damage + 1);
+        
                 int damageDealtByMonsters = 0;
-
-                //player strikes first
-                selectedMonster.TakeDamage(damageDealt);
-
-                if (monstersToFight.All(m => !m.IsAlive())) //all monsters not alive
+                Dictionary<string, int> monsterDamageLog = new();
+        
+                if (actionChoice == "1") // Attack
+                {
+                    // Player attacks
+                    int damage = player.CurrentWeapon.MaximumDamage;
+                    int damageDealt = selectedMonster.random.Next(1, damage + 1);
+                    selectedMonster.TakeDamage(damageDealt);
+            
+                    Console.Clear();
+                    Console.WriteLine($"\nYou swing your {player.CurrentWeapon.Name} with all your might!");
+                    Console.WriteLine($"You hit {selectedMonster.Name}, dealing {damageDealt}HP damage! {(selectedMonster.IsAlive() ? $"It lives with {selectedMonster.CurrentHitPoints}HP left!" : "It collapses, defeated!")}");
+                }
+                else if (actionChoice == "2") // Use Item
+                {
+                    // Use item logic
+                    if (!UseCombatItem())
+                    {
+                    // If player didn't use an item or cancelled, return to monster selection
+                        continue;
+                    }
+            
+                    Console.Clear();
+                    Console.WriteLine($"You've used an item to help in battle!");
+                }
+        
+                if (monstersToFight.All(m => !m.IsAlive())) // All monsters defeated
                 {
                     break;
                 }
 
-                //all 3 monster that are alive attack the player
-                Dictionary<string, int> monsterDamageLog = new();
-
+                // All surviving monsters attack the player
                 foreach (Monster monster in monstersToFight)
                 {
                     if (monster.IsAlive())
                     {
-                        int damageDealtByMonster = selectedMonster.random.Next(1, monster.MaximumDamage + 1);
+                        int damageDealtByMonster = monster.random.Next(1, monster.MaximumDamage + 1);
                         monsterDamageLog[$"{monster.Name}"] = damageDealtByMonster;
                         damageDealtByMonsters += damageDealtByMonster;
                     }
                 }
-                //1 keer takedamage callen in plaats van 3 keer
+        
+                // Apply monster damage to player
                 player.TakeDamage(monsterDamageLog.Values.Sum());
-                
+        
+                Console.WriteLine($"\nThe monsters retaliate, hurting you for {monsterDamageLog.Values.Sum()}HP in total!");
+        
+                foreach (var entry in monsterDamageLog)
+                {
+                    Console.WriteLine($"    -{entry.Key} dealt {entry.Value}HP of damage.");
+                }
+
+                Console.WriteLine($"\nYour current HP: {player.CurrentHitPoints}");
+        
                 if (!player.IsAlive())
                 {
                     List<string> deathMessages = new List<string>
                     {
                         "Your vision blurs... A chilling numbness creeps over you... Then, nothing.",
                         "You collapse to the ground, your strength fading... Darkness consumes you.",
-                        "A sharp pain jolts through you—then silence. The battle is over... for you.",
+                       "A sharp pain jolts through you—then silence. The battle is over... for you.",
                         "Your knees buckle. The last thing you see is your foe standing victorious...",
                         "A cold hand seems to grasp your soul as your body gives in to exhaustion...",
                         "You fought bravely, but fate had other plans. The world fades to black...",
                         "Your breath grows shallow. A final whisper escapes your lips before everything ends...",
                         "The weight of battle is too much. You fall, unable to continue...",
-                        "As your consciousness drifts away, a single thought lingers... ‘Is this the end?’",
+                        "As your consciousness drifts away, a single thought lingers... 'Is this the end?'",
                         "Darkness envelops you. Your journey... has come to an end."
                     };
 
@@ -314,28 +346,103 @@ namespace _2425_OP34_Group2_Project_Alpha
                     restartGame();
                     return;
                 }
-                
-                Console.Clear();
-                Console.WriteLine($"\nYou swing your {player.CurrentWeapon.Name} with all your might!");
-                Console.WriteLine($"You hit {selectedMonster.Name}, dealing {damageDealt}HP damage! {(selectedMonster.IsAlive() ? $"It lives with {selectedMonster.CurrentHitPoints}HP left!" : "It collapses, defeated!")}");
 
-                Console.WriteLine($"\nThe monsters retaliate, hurting you for {monsterDamageLog.Values.Sum()}HP in total!");
-                
-                foreach (var entry in monsterDamageLog)
-                {
-                    Console.WriteLine($"    -{entry.Key} dealt {entry.Value}HP of damage.");
-                }
-
-                Console.WriteLine($"\nYour current HP: {player.CurrentHitPoints}");
+                // Check if any monsters are still alive
+                allMonstersAlive = monstersToFight.Any(m => m.IsAlive());
 
                 Console.WriteLine("\nPress Enter to continue...");
                 Console.ReadLine();
             }
-
             PlayerQuest.CompleteQuest(PlayerQuest.ActiveQuest, player);
 
             Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
+        }
+
+        private static bool UseCombatItem()
+        {
+            // Filter inventory to only show consumable items (not weapons)
+            List<Item> consumables = new List<Item>();
+            List<int> itemIndices = new List<int>();
+    
+            for (int i = 0; i < player.Inventory.Count; i++)
+            {
+                if (!(player.Inventory[i] is Weapon))
+                {
+                    consumables.Add(player.Inventory[i]);
+                    itemIndices.Add(i);
+                }
+            }
+    
+            if (consumables.Count == 0)
+            {
+                Console.Clear();
+                Console.WriteLine("You don't have any usable items in your inventory!");
+                Console.WriteLine("Press enter to continue...");
+                Console.ReadLine();
+                return false;
+            }
+    
+            Console.Clear();
+            Console.WriteLine("\nSelect an item to use during this round:");
+    
+            for (int i = 0; i < consumables.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {consumables[i].Name}");
+            }
+    
+            Console.WriteLine($"{consumables.Count + 1}. Cancel");
+    
+            // Create valid options list
+            List<string> validOptions = new List<string>();
+            for (int i = 1; i <= consumables.Count + 1; i++)
+            {
+                validOptions.Add(i.ToString());
+            }
+    
+            string input = GetValidInput(validOptions);
+            int selectedIndex = int.Parse(input) - 1;
+    
+            // Check if user selected cancel
+            if (selectedIndex >= consumables.Count)
+            {
+                return false;
+            }
+    
+            // Use the selected item
+            Item selectedItem = consumables[selectedIndex];
+            int inventoryIndex = itemIndices[selectedIndex];
+    
+            // Item effect logic based on item name
+            Console.WriteLine($"You used {selectedItem.Name}!");
+    
+            // Apply healing effects based on item name
+            if (selectedItem.Name.Contains("Health Potion"))
+            {
+                Console.Clear();
+                int healAmount = 40;
+                player.CurrentHitPoints = Math.Min(player.MaximumHitPoints, player.CurrentHitPoints + healAmount);
+                Console.WriteLine($"You healed for {healAmount} HP!");
+                Console.WriteLine($"Your current HP now: {player.CurrentHitPoints}\n");
+            }
+            else if (selectedItem.Name.Contains("Shield Potion"))
+            {
+                Console.Clear();
+                player.MaximumHitPoints = 130;
+                int healAmount = 30;
+                player.CurrentHitPoints = Math.Min(player.MaximumHitPoints, player.CurrentHitPoints + healAmount);
+                Console.WriteLine($"You have used a Shield Potion! Your maximum HP is now {player.MaximumHitPoints}!");
+                Console.WriteLine($"You fully healed for {healAmount} HP!");
+                Console.WriteLine($"Your current HP now: {player.CurrentHitPoints}\n");
+            }
+
+            // Remove the item from inventory after use
+           player.Inventory.RemoveAt(inventoryIndex);
+    
+           Console.WriteLine("Press enter to continue...");
+           Console.ReadLine();
+    
+            return true;
         }
 
 
@@ -351,12 +458,12 @@ namespace _2425_OP34_Group2_Project_Alpha
             witch.TalkToPlayer(player);
         }
     
-        private static bool ValidateInput(string? input, List<string> options)
+        public static bool ValidateInput(string? input, List<string> options)
         {
             return input != null && options.Contains(input);
         }
 
-        private static string GetValidInput(List<string> validOptions)
+        public static string GetValidInput(List<string> validOptions)
         {
             string? input;
             do
@@ -384,39 +491,56 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine($"   Monster: {(location.MonsterLivingHere != null ? $"{location.MonsterLivingHere.Name} - id {location.MonsterLivingHere.ID}" : "None")}\n");
             }
         }
+        
         private static void OpenInventory()
         {
-            string input = string.Empty;
-
-            while(input != "2")
+            Console.Clear();
+            Console.WriteLine("----------\nInventory:\n----------\n");
+            
+            if (player.Inventory.Count == 0)
             {
-                Console.Clear();
-                Console.WriteLine("----------\nInventory:\n----------\n");
-                foreach (Item item in player.Inventory)
+                Console.WriteLine("Your inventory is empty.");
+            }
+            else
+            {
+                for (int i = 0; i < player.Inventory.Count; i++)
                 {
-                    if (item is Weapon)
+                    Item item = player.Inventory[i];
+                    if (item is Weapon weapon)
                     {
-                        Weapon weapon = (Weapon)item;
-                        Console.WriteLine($"- {item.Name} (Damage: 1-{weapon.MaximumDamage})");
+                        string equippedStatus = (player.CurrentWeapon == weapon) ? " [EQUIPPED]" : "";
+                        Console.WriteLine($"{i + 1}. {item.Name} - (Damage: {weapon.MaximumDamage}){equippedStatus}");
                     }
                     else
                     {
-                        Console.WriteLine($"- {item.Name}");
+                        Console.WriteLine($"{i + 1}. {item.Name}");
                     }
                 }
             
                 Console.WriteLine("\nWhat would you like to do?");
-                Console.WriteLine("1. Use an item");
+                Console.WriteLine("1. Use/equip an item");
                 Console.WriteLine("2. Close inventory");
             
-                input = GetValidInput(["1", "2"]);
-                if (input == "1")
+                string input = Console.ReadLine();
+            
+                switch (input)
                 {
-                    UseItem();
+                    case "1":
+                        UseItem();
+                        break;
+                    case "2":
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input. Please try again.");
+                        Console.WriteLine("Press enter to continue...");
+                        Console.ReadLine();
+                        OpenInventory();
+                        break;
                 }
             }
             
         }
+        
         private static void UseItem()
         {
             List<string> optionsList = new();
@@ -424,27 +548,34 @@ namespace _2425_OP34_Group2_Project_Alpha
             Console.WriteLine("\nWhich item would you like to use?");
             for (int i = 0; i < player.Inventory.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {player.Inventory[i].Name}");
-                optionsList.Add($"{i + 1}");
+                Item item = player.Inventory[i];
+                if (item is Weapon weapon)
+                {
+                    Console.WriteLine($"{i + 1}. {item.Name} (Weapon - Damage: {weapon.MaximumDamage})");
+                }
+                else
+                {
+                    Console.WriteLine($"{i + 1}. {item.Name}");
+                }
             }
-
-            Console.WriteLine("X to cancel");
-            optionsList.Add("X");
-        
-            string input = GetValidInput(optionsList);
-
-            if (input == "X")
-            {
-                return;
-            }
-        
+            
+            string input = Console.ReadLine();
+            
             if (int.TryParse(input, out int index) && index > 0 && index <= player.Inventory.Count)
             {
                 Item item = player.Inventory[index - 1];
-
-                Console.WriteLine($"You used {item.Name}.");
-        
-                player.Inventory.RemoveAt(index - 1);
+                
+                if (item is Weapon weapon)
+                {
+                    player.CurrentWeapon = weapon;
+                    Console.WriteLine($"You equipped {weapon.Name}.");
+                }
+                else
+                {
+                    Console.WriteLine($"You used {item.Name}.");
+                    player.Inventory.RemoveAt(index - 1);
+                }
+                
             }
             
             Console.WriteLine("Press Enter to continue...");
@@ -476,6 +607,5 @@ namespace _2425_OP34_Group2_Project_Alpha
             Console.WriteLine("\nPress enter to restart");
             Console.ReadLine();
         }
-
-        }
     }
+}

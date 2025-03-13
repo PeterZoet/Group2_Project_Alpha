@@ -53,7 +53,7 @@ public class PlayerQuest
             quest.CompleteQuest();
         }
 
-        if (PlayerQuest.CompletedQuests.Count == 2)
+        if (CompletedQuests.Count == 2)
         {
             Location guardPost = World.LocationByID(3);
             Location bridge = World.LocationByID(8);
