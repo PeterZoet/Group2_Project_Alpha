@@ -21,7 +21,8 @@ public class Player
         Inventory = new List<Item>();
         Inventory.Add(new Weapon(World.WEAPON_ID_RUSTY_SWORD,"Rusty Sword", 5));
         Inventory.Add(new Weapon(World.WEAPON_ID_CLUB, "Club", 10));
-        Inventory.Add(new Item("Healing Potion"));
+        Inventory.Add(new Item("Health Potion"));
+        Inventory.Add(new Item("Shield Potion"));
         
     }
 
