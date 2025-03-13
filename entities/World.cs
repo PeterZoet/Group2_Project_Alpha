@@ -141,7 +141,7 @@ public static class World
 
         alchemistsGarden.LocationToSouth = alchemistHut;
 
-        guardPost.LocationToEast = bridge;
+        //guardPost.LocationToEast = bridge;
         guardPost.LocationToWest = townSquare;
 
         bridge.LocationToWest = guardPost;

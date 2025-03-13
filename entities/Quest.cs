@@ -23,8 +23,11 @@ public class Quest
     {
         IsActive = true;
         WasStarted = true;
+        Console.Clear();
         Console.WriteLine($"Quest started: {Name}");
         Console.WriteLine(Description);
+        Console.WriteLine("\nPress enter to continue...");
+        Console.ReadLine();
     }
 
     public void FleeQuest()
