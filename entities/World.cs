@@ -143,15 +143,15 @@ public static class World
 
         //guardPost.LocationToEast = bridge;
         guardPost.LocationToWest = townSquare;
+        guardPost.LocationToNorth = witchHut;
 
         bridge.LocationToWest = guardPost;
         bridge.LocationToEast = spiderField;
-        bridge.LocationToNorth = witchHut;
 
         spiderField.LocationToWest = bridge;
 
         witchHut.LocationToWest = alchemistHut;
-        witchHut.LocationToSouth = bridge;
+        witchHut.LocationToSouth = guardPost;
 
         // Add the locations to the static list
         Locations.Add(home);
