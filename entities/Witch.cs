@@ -1,3 +1,5 @@
+using _2425_OP34_Group2_Project_Alpha;
+
 namespace entities;
 public class Witch
 {
@@ -34,9 +36,8 @@ public class Witch
             Console.WriteLine("3: Full Heal - 4 Coins");
             Console.WriteLine("4: View Shop");
             Console.WriteLine("5: Return");
-            Console.Write("Enter a valid option: 1, 2, 3, 4, 5: ");
 
-            string choice = Console.ReadLine();
+            string choice = Program.GetValidInput(["1", "2", "3", "4", "5"]);
             switch (choice)
             {
                 case "1":
@@ -53,10 +54,6 @@ public class Witch
                     break;
                 case "5":
                     return;
-                default:
-                    Console.WriteLine("Invalid choice, press Enter to continue...");
-                    Console.ReadLine();
-                    break;
             }
         }
     }
@@ -77,18 +74,19 @@ public class Witch
             Console.WriteLine($"{ItemsForSale.Count + 1}: Return");
             Console.Write("Enter the number of the item you want to buy: ");
 
-            if (int.TryParse(Console.ReadLine(), out int itemNumber))
+            List<string> optionString = new();
+            for (int i = 0; i < ItemsForSale.Count; i++)
+            {
+                optionString.Add($"{i}");
+            }         
+
+            if (int.TryParse(Program.GetValidInput(optionString), out int itemNumber))
             {
                 if (itemNumber == ItemsForSale.Count + 1)
                 {
                     return;
                 }
                 SellItem(player, itemNumber);
-            }
-            else
-            {
-                Console.WriteLine("Invalid input, press Enter to continue...");
-                Console.ReadLine();
             }
         }
     }
