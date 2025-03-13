@@ -331,11 +331,8 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine("\nPress Enter to continue...");
                 Console.ReadLine();
             }
-            Console.WriteLine("\n+----------------------+");
-            Console.WriteLine($"All monsters defeated! You stand victorious amidst the fallen beasts!\nYou completed the quest {PlayerQuest.ActiveQuest!.Name}");
-            Console.WriteLine("+----------------------+");
 
-            PlayerQuest.CompleteQuest(PlayerQuest.ActiveQuest);
+            PlayerQuest.CompleteQuest(PlayerQuest.ActiveQuest, player);
 
             Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
