@@ -7,14 +7,38 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         static void Main()
         {
+            Console.Title = "Project Alpa: a simple rpg game";
+
+            // ASCII Art Title
+            string title = @"
+ ________  ___  _____ ______   ________  ___       _______           ________  ________  ________     
+|\   ____\|\  \|\   _ \  _   \|\   __  \|\  \     |\  ___ \         |\   __  \|\   __  \|\   ____\    
+\ \  \___|\ \  \ \  \\\__\ \  \ \  \|\  \ \  \    \ \   __/|        \ \  \|\  \ \  \|\  \ \  \___|    
+ \ \_____  \ \  \ \  \\|__| \  \ \   ____\ \  \    \ \  \_|/__       \ \   _  _\ \   ____\ \  \  ___  
+  \|____|\  \ \  \ \  \    \ \  \ \  \___|\ \  \____\ \  \_|\ \       \ \  \\  \\ \  \___|\ \  \|\  \ 
+    ____\_\  \ \__\ \__\    \ \__\ \__\    \ \_______\ \_______\       \ \__\\ _\\ \__\    \ \_______\
+   |\_________\|__|\|__|     \|__|\|__|     \|_______|\|_______|        \|__|\|__|\|__|     \|_______|
+   \|_________|                                                                                       
+                                                                                                    
+            ";
+            Console.WriteLine(title);
+
+            Console.WriteLine("\nPress enter to start");
+            Console.ReadLine();
+
+            RunGame();
+        }
+
+        public static void RunGame()
+        {
             bool gameRunning = true;
 
             while (gameRunning)
             {
                 Console.Clear();
-                Console.WriteLine("What would you like to do (enter a number)?");
+                Console.WriteLine("What would you like to do (enter a number)?\n");
                 Console.WriteLine($"You are at: {player.CurrentLocation.Name}.");
-                Console.WriteLine(player.CurrentLocation.Description);
+                Console.WriteLine($"{player.CurrentLocation.Description}\n");
                 
                 List<string> options = new List<string>
                 {
@@ -84,8 +108,6 @@ namespace _2425_OP34_Group2_Project_Alpha
                     break;
                 case "Start Quest":
                     PlayerQuest.StartQuest(player.CurrentLocation.QuestAvailableHere);
-                    Console.WriteLine("Press enter to continue...");
-                    Console.ReadLine();
                     break;
                 case "Flee Quest":
                     PlayerQuest.FleeQuest(player.CurrentLocation.QuestAvailableHere);
@@ -119,6 +141,11 @@ namespace _2425_OP34_Group2_Project_Alpha
             else
             {
                 Console.WriteLine($"- {PlayerQuest.ActiveQuest?.Name}: {PlayerQuest.ActiveQuest?.Description}");                
+            }
+            Console.WriteLine("\nCompleted Quests:");
+            foreach (Quest quest in PlayerQuest.CompletedQuests)
+            {
+                Console.WriteLine(quest.Name);
             }
 
             Console.WriteLine("Press enter to continue...");
@@ -156,48 +183,168 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         private static void Fight()
         {
-            Monster monsterToFight = player.CurrentLocation.MonsterLivingHere;
-            Console.WriteLine($"\nYou are about to fight a: {player.CurrentLocation.MonsterLivingHere.Name}");
-            Console.WriteLine($"\nBoss HP: {monsterToFight.CurrentHitPoints}");
-            Console.WriteLine("\nDo you want to attack it?\n");
-            string choice = GetValidInput(["Y","N"]);
+            Console.Clear();
+            Monster baseMonster = player.CurrentLocation.MonsterLivingHere;
+
+            List<Monster> monstersToFight = new List<Monster>
+            {
+                new Monster(baseMonster.ID, baseMonster.Name + "-1", baseMonster.MaximumHitPoints, baseMonster.CurrentHitPoints),
+                new Monster(baseMonster.ID, baseMonster.Name+ "-2", baseMonster.MaximumHitPoints, baseMonster.CurrentHitPoints),
+                new Monster(baseMonster.ID, baseMonster.Name+ "-3", baseMonster.MaximumHitPoints, baseMonster.CurrentHitPoints)
+            };
+
+            Console.WriteLine($"You stand face-to-face with three {baseMonster.Name}s!");
+
+            for (int i = 0; i < monstersToFight.Count; i++)
+            {
+                Console.WriteLine($"{baseMonster.Name}-{i + 1}: {monstersToFight[i].CurrentHitPoints}HP");
+            }
+
+            Console.WriteLine("\nDo you want to engage in battle?");
+            string choice = GetValidInput(["Y", "N"]);
 
             if (choice == "N")
             {
+                Console.WriteLine("\nYou cautiously step back into the shadows, avoiding the fight for now...");
+
+                Console.WriteLine("Press enter to continue...");
+                Console.ReadLine();
                 return;
             }
 
             Console.Clear();
 
-            while (monsterToFight.IsAlive())
-            {
-                Console.WriteLine($"Would you like to attack the {monsterToFight.Name} with your {player.CurrentWeapon.Name}?");
-                string conChoiche = GetValidInput(["Y","N"]);
+            bool allMonstersAlive = monstersToFight.All(m => m.IsAlive());
 
-                if (conChoiche == "N")
+            while (allMonstersAlive)
+            {
+                List<string> options = new();
+                List<string> optionsToValidate = new();
+                for (int i = 0; i < monstersToFight.Count; i++)
                 {
-                    Console.WriteLine($"You fled from the fight, come back if you are stronger/healed!");
+                    if (monstersToFight[i].IsAlive())
+                    {
+                        options.Add($"{monstersToFight[i].Name} ({monstersToFight[i].CurrentHitPoints}HP)");
+                        optionsToValidate.Add($"{i + 1}");
+                    }
+                }
+                
+                Console.Clear();
+                Console.WriteLine($"The battle rages on! Which monster will you target? {string.Join(", ", options)}");
+
+                int selectedMonsterIndex = int.Parse(GetValidInput(optionsToValidate)) - 1;
+
+                Monster selectedMonster = monstersToFight[selectedMonsterIndex];
+
+                Console.Clear();
+                Console.WriteLine($"You move closer to {selectedMonster.Name}. ({selectedMonster.CurrentHitPoints}HP)");
+                Console.WriteLine($"The foe's prepare to strike...");
+
+                Console.WriteLine($"\nYou have {player.CurrentHitPoints}HP");
+
+                Console.WriteLine($"\nBe aware the {baseMonster.Name}s will retaliate and deal between 1-{selectedMonster.MaximumDamage}HP of damage each!");
+                Console.WriteLine($"Would you like to strike with your {player.CurrentWeapon.Name}? (1-{player.CurrentWeapon.MaximumDamage} dmg)");
+                Console.WriteLine($"\n(NOTE: If you dicide to flee, the current quest will be canceld and monsters reset)");
+                string attackChoice = GetValidInput(["Y", "N"]);
+
+                if (attackChoice == "N")
+                {
+                    PlayerQuest.ActiveQuest = null;
+                    Console.Clear();
+                    Console.WriteLine("You fled from the fight! Come back when you're stronger.");
+                    Console.WriteLine("Hint: find a place to heal!");
+
+                    Console.WriteLine("Press enter to continue...");
+                    Console.ReadLine();
                     return;
                 }
 
-                int Attack = player.CurrentWeapon.MaximumDamage;
-                int damage = monsterToFight.random.Next(1, Attack + 1);
-                int damageToPlayer = monsterToFight.Attack();
+                int damage = player.CurrentWeapon.MaximumDamage;
+                int damageDealt = selectedMonster.random.Next(1, damage + 1);
+                int damageDealtByMonsters = 0;
 
-                player.TakeDamage(damageToPlayer);
-                monsterToFight.TakeDamage(damage);
+                //player strikes first
+                selectedMonster.TakeDamage(damageDealt);
 
+                if (monstersToFight.All(m => !m.IsAlive())) //all monsters not alive
+                {
+                    break;
+                }
 
-                Console.WriteLine($"\nBoss HP: {monsterToFight.CurrentHitPoints}");
-                Console.WriteLine($"Damage done to boss: {damage}hp");
-                Console.WriteLine($"\nYour HP: {player.CurrentHitPoints}");
-                Console.WriteLine($"boss hurt you for: {damageToPlayer}hp");
+                //all 3 monster that are alive attack the player
+                Dictionary<string, int> monsterDamageLog = new();
+
+                foreach (Monster monster in monstersToFight)
+                {
+                    if (monster.IsAlive())
+                    {
+                        int damageDealtByMonster = selectedMonster.random.Next(1, monster.MaximumDamage + 1);
+                        monsterDamageLog[$"{monster.Name}"] = damageDealtByMonster;
+                        damageDealtByMonsters += damageDealtByMonster;
+                    }
+                }
+                //1 keer takedamage callen in plaats van 3 keer
+                player.TakeDamage(monsterDamageLog.Values.Sum());
+                
+                if (!player.IsAlive())
+                {
+                    List<string> deathMessages = new List<string>
+                    {
+                        "Your vision blurs... A chilling numbness creeps over you... Then, nothing.",
+                        "You collapse to the ground, your strength fading... Darkness consumes you.",
+                        "A sharp pain jolts through you—then silence. The battle is over... for you.",
+                        "Your knees buckle. The last thing you see is your foe standing victorious...",
+                        "A cold hand seems to grasp your soul as your body gives in to exhaustion...",
+                        "You fought bravely, but fate had other plans. The world fades to black...",
+                        "Your breath grows shallow. A final whisper escapes your lips before everything ends...",
+                        "The weight of battle is too much. You fall, unable to continue...",
+                        "As your consciousness drifts away, a single thought lingers... ‘Is this the end?’",
+                        "Darkness envelops you. Your journey... has come to an end."
+                    };
+
+                    // Select a random death message
+                    Random rnd = new Random();
+                    string deathMessage = deathMessages[rnd.Next(deathMessages.Count)];
+                    Console.Clear();
+                    Console.WriteLine(deathMessage);
+                    YouDied();
+                    Console.ReadLine();
+                    restartGame();
+                    return;
+                }
+                
+                Console.Clear();
+                Console.WriteLine($"\nYou swing your {player.CurrentWeapon.Name} with all your might!");
+                Console.WriteLine($"You hit {selectedMonster.Name}, dealing {damageDealt}HP damage! {(selectedMonster.IsAlive() ? $"It lives with {selectedMonster.CurrentHitPoints}HP left!" : "It collapses, defeated!")}");
+
+                Console.WriteLine($"\nThe monsters retaliate, hurting you for {monsterDamageLog.Values.Sum()}HP in total!");
+                
+                foreach (var entry in monsterDamageLog)
+                {
+                    Console.WriteLine($"    -{entry.Key} dealt {entry.Value}HP of damage.");
+                }
+
+                Console.WriteLine($"\nYour current HP: {player.CurrentHitPoints}");
+
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
             }
+            Console.WriteLine("\n+----------------------+");
+            Console.WriteLine($"All monsters defeated! You stand victorious amidst the fallen beasts!\nYou completed the quest {PlayerQuest.ActiveQuest!.Name}");
+            Console.WriteLine("+----------------------+");
+
             PlayerQuest.CompleteQuest(PlayerQuest.ActiveQuest);
-            Console.WriteLine("\nBoss defeated!");
-            Console.WriteLine("Press enter to continue...");
+
+            Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
-            
+        }
+
+
+        private static void restartGame()
+        {
+            player.CurrentLocation = World.Locations[0];
+            PlayerQuest.CompletedQuests = [];
+            player = new(World.Weapons[0], World.Locations[0]);
         }
 
         private static void TalkToWitch(Witch witch)
@@ -217,9 +364,8 @@ namespace _2425_OP34_Group2_Project_Alpha
                 Console.WriteLine("3: Full Heal - 4 🪙");
                 Console.WriteLine("4: View Shop");
                 Console.WriteLine("5: Return");
-                Console.WriteLine("Enter a valid option: 1, 2, 3, 4, 5");
 
-                string choice = Console.ReadLine();
+                string choice = GetValidInput(["1", "2", "3", "4", "5"]);
                 switch (choice)
                 {
                     case "1":
@@ -237,10 +383,6 @@ namespace _2425_OP34_Group2_Project_Alpha
                         break;
                     case "5":
                         return;
-                    default:
-                        Console.WriteLine("Invalid choice, press Enter to continue...");
-                        Console.ReadLine();
-                        break;
                 }
             }
         }
@@ -261,7 +403,7 @@ namespace _2425_OP34_Group2_Project_Alpha
             string? input;
             do
             {
-                Console.WriteLine($"Enter a valid option: {string.Join(", ", validOptions)}");
+                Console.WriteLine($"\n-------------\nEnter a valid option: {string.Join(", ", validOptions)}");
                 input = Console.ReadLine()?.ToUpper();
             } while (!ValidateInput(input, validOptions));
 
@@ -288,7 +430,7 @@ namespace _2425_OP34_Group2_Project_Alpha
         private static void OpenInventory()
         {
             Console.Clear();
-            Console.WriteLine("Inventory:");
+            Console.WriteLine("----------\nInventory:\n----------\n");
             
             if (player.Inventory.Count == 0)
             {
@@ -331,11 +473,14 @@ namespace _2425_OP34_Group2_Project_Alpha
                         break;
                 }
             }
+            
         }
         
         private static void UseItem()
         {
-            Console.WriteLine("Which item would you like to use?");
+            List<string> optionsList = new();
+
+            Console.WriteLine("\nWhich item would you like to use?");
             for (int i = 0; i < player.Inventory.Count; i++)
             {
                 Item item = player.Inventory[i];
@@ -366,14 +511,36 @@ namespace _2425_OP34_Group2_Project_Alpha
                     player.Inventory.RemoveAt(index - 1);
                 }
                 
-                Console.WriteLine("Press enter to continue...");
-                Console.ReadLine();
             }
-            else
-            {
-                Console.WriteLine("Invalid input. Please try again.");
-                UseItem();
-            }
+            
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
+        }
+
+        public static void YouDied()
+        {
+            Console.Title = "Players healt <= 0";
+
+            // ASCII Art Title
+            string title = @"
+
+
+
+            
+          _______               ______  _________ _______  ______   _ 
+|\     /|(  ___  )|\     /|    (  __  \ \__   __/(  ____ \(  __  \ ( )
+( \   / )| (   ) || )   ( |    | (  \  )   ) (   | (    \/| (  \  )| |
+ \ (_) / | |   | || |   | |    | |   ) |   | |   | (__    | |   ) || |
+  \   /  | |   | || |   | |    | |   | |   | |   |  __)   | |   | || |
+   ) (   | |   | || |   | |    | |   ) |   | |   | (      | |   ) |(_)
+   | |   | (___) || (___) |    | (__/  )___) (___| (____/\| (__/  ) _ 
+   \_/   (_______)(_______)    (______/ \_______/(_______/(______/ (_)
+                                                                      
+            ";
+            Console.WriteLine(title);
+
+            Console.WriteLine("\nPress enter to restart");
+            Console.ReadLine();
         }
     }
 }

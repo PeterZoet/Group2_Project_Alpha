@@ -13,7 +13,7 @@ public class Player
     public Player(Weapon currentWeapon, Location startLocation)
     {
         MaximumHitPoints = 100;
-        CurrentHitPoints = 10;
+        CurrentHitPoints = MaximumHitPoints;
         CurrentWeapon = currentWeapon;
         CurrentLocation = startLocation;
         _previousLocation = startLocation;
