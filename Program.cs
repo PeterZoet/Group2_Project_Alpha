@@ -11,14 +11,16 @@ namespace _2425_OP34_Group2_Project_Alpha
 
             // ASCII Art Title
             string title = @"
- ________  ___  _____ ______   ________  ___       _______           ________  ________  ________     
-|\   ____\|\  \|\   _ \  _   \|\   __  \|\  \     |\  ___ \         |\   __  \|\   __  \|\   ____\    
-\ \  \___|\ \  \ \  \\\__\ \  \ \  \|\  \ \  \    \ \   __/|        \ \  \|\  \ \  \|\  \ \  \___|    
- \ \_____  \ \  \ \  \\|__| \  \ \   ____\ \  \    \ \  \_|/__       \ \   _  _\ \   ____\ \  \  ___  
-  \|____|\  \ \  \ \  \    \ \  \ \  \___|\ \  \____\ \  \_|\ \       \ \  \\  \\ \  \___|\ \  \|\  \ 
-    ____\_\  \ \__\ \__\    \ \__\ \__\    \ \_______\ \_______\       \ \__\\ _\\ \__\    \ \_______\
-   |\_________\|__|\|__|     \|__|\|__|     \|_______|\|_______|        \|__|\|__|\|__|     \|_______|
-   \|_________|                                                                                       
+
+ _____ _                 _        ____________ _____ 
+/  ___(_)               | |       | ___ \ ___ \  __ \
+\ `--. _ _ __ ___  _ __ | | ___   | |_/ / |_/ / |  \/
+ `--. \ | '_ ` _ \| '_ \| |/ _ \  |    /|  __/| | __ 
+/\__/ / | | | | | | |_) | |  __/  | |\ \| |   | |_\ \
+\____/|_|_| |_| |_| .__/|_|\___|  \_| \_\_|    \____/
+                  | |                                
+                  |_|                                
+                                                                                    
                                                                                                     
             ";
             Console.WriteLine(title);
@@ -349,48 +351,7 @@ namespace _2425_OP34_Group2_Project_Alpha
 
         private static void TalkToWitch(Witch witch)
         {
-            while (true)
-            {
-                Console.Clear();
-                Console.WriteLine($"Talking to {witch.Name} The Witch...");
-
-                Console.WriteLine("\nAh, a weary traveler! The winds whisper of your journey... let me mend your wounds and share my wares for just a few coins.\n");
-
-                Console.WriteLine($"Health Points: {player.CurrentHitPoints}/{player.MaximumHitPoints}");
-                Console.WriteLine($"Coin Balance: {player.Coins} 🪙\n");
-                
-                Console.WriteLine("1: Small Heal (30HP) - Free");
-                Console.WriteLine("2: Medium heal (60HP) - 2 🪙");
-                Console.WriteLine("3: Full Heal - 4 🪙");
-                Console.WriteLine("4: View Shop");
-                Console.WriteLine("5: Return");
-
-                string choice = GetValidInput(["1", "2", "3", "4", "5"]);
-                switch (choice)
-                {
-                    case "1":
-                        // Small Heal
-                        witch.HealToAmount(player, 30, 0);
-                        break;
-                    case "2":
-                        witch.HealToAmount(player, 60, 2);
-                        break;
-                    case "3":
-                        witch.FullHeal(player, 4);
-                        break;
-                    case "4":
-                        OpenShop(witch);
-                        break;
-                    case "5":
-                        return;
-                }
-            }
-        }
-
-        private static void OpenShop(Witch witch)
-        {
-            Console.WriteLine("Witch shop");
-            Thread.Sleep(2000); // Pause application for 2 sec (Remove later: using for testing purposes)
+            witch.TalkToPlayer(player);
         }
     
         private static bool ValidateInput(string? input, List<string> options)
