@@ -1,13 +1,11 @@
 # Simple RPG
 
-A simple console-based RPG game developed in C# where players can choose a character, fight enemies, level up, and explore the game world.
+A simple console-based RPG game developed in C# where players can navigate trough a map and complete quests by slaying monsters!
 
 ## Features
-
-- Character creation with different classes (Warrior, Mage, Archer, etc.)
-- Combat system with attack, defend, and use items
-- Leveling system with experience and stat upgrades
-- Inventory management for items and potions
+- Combat system with attack, and use items
+- Item system for coins and heal/shield potions
+- Inventory management for items and weapons
 - Simple text-based story and encounters
 
 ## How to Use
