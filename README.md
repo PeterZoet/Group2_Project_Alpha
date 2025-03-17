@@ -14,7 +14,7 @@ A simple console-based RPG game developed in C# where players can navigate troug
    - Clone the repository or download the zip file to your local machine.
 
    ```bash
-   git clone https://github.com/yourusername/simple-rpg.git
+   git clone [https://github.com/yourusername/simple-rpg.git](https://github.com/PeterZoet/Group2_Project_Alpha.git)
 
 ## Made With
    - C#: Programming language
